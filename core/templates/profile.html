@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Username{% endblock %}
+
+{% block content %}
+
+    <div class="flex-fill d-flex mt-3">
+        <div class="col-3 flex-fill d-flex flex-column cloud justify-content-center me-3 p-2">
+            <p class="fs-5 text-center">Username</p>
+            <img src="{% get_media_prefix %}user_profile.png" class="img-fluid img-rounded">
+            <div class="d-flex justify-content-between">
+                <p>Publications</p>
+                <span>4</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p>Average rating</p>
+                <span>3</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p>Likes</p>
+                <span>2</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p>Comments</p>
+                <span>1</span>
+            </div>
+        </div>
+
+        <div class="col-9 flex-fill d-flex flex-column">
+
+            <div class="flex-shrink-1 cloud mb-3">
+                <form class="flex-fill" method="get" action="#">
+                    <input class="form-control me-2" name="q" type="search" placeholder="Search for publication..." aria-label="Search">
+                </form>
+            </div>
+
+            <div class="flex-shrink-1 d-flex justify-content-between align-items-center cloud mb-3 p-2">
+                <p class="m-0 fs-4">Publications</p>
+                <a href="#" class="h1 m-0"><i class="bi bi-plus"></i></a>
+            </div>
+
+            <div class="flex-grow-1 cloud">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col" class="text-center">Group</th>
+                            <th scope="col" class="text-center">Title</th>
+                            <th scope="col" class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="text-center">1</th>
+                            <td class="text-center">Music</td>
+                            <td class="text-center">Some very long title</td>
+                            <td class="d-flex flex-row justify-content-around align-items-center">
+                                <a href="#" class="h5 m-0"><i class="bi bi-eye"></i></a>
+                                <a href="#" class="h5 m-0"><i class="bi bi-pencil-square"></i></a>
+                                <a href="#" class="h5 m-0"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+
+{% endblock %}

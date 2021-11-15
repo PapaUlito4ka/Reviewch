@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="Django default">
+  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.16">
+    <root id="1">
+      <ServerVersion>13.1</ServerVersion>
+      <StartupTime>1636572510</StartupTime>
+    </root>
+    <database id="2" parent="1" name="mydb">
+      <ObjectId>16385</ObjectId>
+      <Owner>viktormartahin</Owner>
+    </database>
+    <database id="3" parent="1" name="postgres">
+      <ObjectId>13707</ObjectId>
+      <Comment>default administrative connection database</Comment>
+      <Owner>viktormartahin</Owner>
+    </database>
+    <database id="4" parent="1" name="reviewch">
+      <ObjectId>16388</ObjectId>
+      <Owner>viktormartahin</Owner>
+      <Current>1</Current>
+    </database>
+    <database id="5" parent="1" name="telega-bot">
+      <ObjectId>16387</ObjectId>
+      <Owner>viktormartahin</Owner>
+    </database>
+    <schema id="6" parent="4" name="information_schema">
+      <ObjectId>13423</ObjectId>
+      <StateNumber>292</StateNumber>
+      <Owner>viktormartahin</Owner>
+    </schema>
+    <schema id="7" parent="4" name="pg_catalog">
+      <ObjectId>11</ObjectId>
+      <Comment>system catalog schema</Comment>
+      <StateNumber>285</StateNumber>
+      <Owner>viktormartahin</Owner>
+    </schema>
+    <schema id="8" parent="4" name="public">
+      <ObjectId>2200</ObjectId>
+      <Comment>standard public schema</Comment>
+      <StateNumber>286</StateNumber>
+      <Owner>viktormartahin</Owner>
+      <Current>1</Current>
+    </schema>
+  </database-model>
+</dataSource>

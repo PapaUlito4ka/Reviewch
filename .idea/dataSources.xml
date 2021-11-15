@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="db" uuid="83caede7-544a-4343-ad74-745d886dcc02">
-      <driver-ref>sqlite.xerial</driver-ref>
+    <data-source source="LOCAL" name="Django default" uuid="331000dd-1a7c-43f6-8bd9-5d64118012ca">
+      <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/db.sqlite3</jdbc-url>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/reviewch/settings.py</remarks>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://127.0.0.1:5432/reviewch</jdbc-url>
     </data-source>
   </component>
 </project>

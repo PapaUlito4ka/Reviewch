@@ -1,0 +1,26 @@
+body {
+    padding-top: 65px;
+}
+
+body {
+    background-color: #E5E5E5;
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+a:hover {
+    color: #000000;
+}
+
+.cloud {
+    background-color: #ffffff;
+    border-radius: 5px;
+}
+
+.blue-cloud {
+    background-color: #6BC2F2;
+    border-radius: 5px;
+}
