@@ -3,6 +3,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import User
 from django.db import models
 
+
 class Review(models.Model):
     title = models.CharField(max_length=128, null=False)
     text = models.TextField(null=False)
@@ -17,6 +18,12 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def get_average_rating(self):
+        return self.user_ratings.aggregate(models.Avg('rating'))['rating__avg']
+
+    def get_likes(self):
+        return self.user_likes.count()
+
 
 class Comment(models.Model):
     text = models.TextField(null=False)
@@ -27,6 +34,9 @@ class Comment(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def get_likes(self):
+        return self.user_likes.count()
 
 
 class UserReviewRating(models.Model):

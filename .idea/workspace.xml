@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8cf746a2-15d9-4c79-b695-2c374adfb206" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reviewch/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewch/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reviewch/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewch/urls.py" afterDir="false" />
     </list>
@@ -30,11 +29,6 @@
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="Django default" type="feb32156:DbDataSourceImpl" />
       </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="Django default" type="feb32156:DbDataSourceImpl" />
-        <item name="reviewch: database" type="162271b6:PgImplModel$Database" />
-      </path>
     </expand>
     <select />
   </component>
@@ -44,9 +38,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
         <option value="CSS File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -146,7 +140,9 @@
       <updated>1636564661499</updated>
       <workItem from="1636564662824" duration="7104000" />
       <workItem from="1636966148322" duration="5845000" />
-      <workItem from="1637004039142" duration="10476000" />
+      <workItem from="1637004039142" duration="10774000" />
+      <workItem from="1637079024041" duration="9494000" />
+      <workItem from="1637097700199" duration="2602000" />
     </task>
     <servers />
   </component>
