@@ -1,8 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-from django.contrib.auth.models import User
 
-from core.models import Review, Comment, Tag
+from core.models import Review, Comment, Tag, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -14,9 +13,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password',
+        fields = ('id', 'username', 'password', 'email',
                   'is_staff', 'reviews', 'last_login', 'date_joined')
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'email': {'required': True}
+        }
 
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])

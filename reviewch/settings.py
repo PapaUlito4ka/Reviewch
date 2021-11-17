@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'core',
     'whitenoise.runserver_nostatic',
     'rest_framework',
+    'widget_tweaks'
 ]
 
 MIDDLEWARE = [
@@ -144,6 +145,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+LOGIN_REDIRECT_URL = '/profile/'
+
+LOGOUT_REDIRECT_URL = '/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

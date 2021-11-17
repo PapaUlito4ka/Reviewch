@@ -29,7 +29,23 @@
                         </form>
                     </div>
                     <div class="d-flex justify-content-end" id="navbarNav">
-                        <a href="#"><i class="bi bi-person h1"></i></a>
+
+                        <div class="dropdown">
+                            <a class="" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person h1"></i>
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                {% if user.is_authenticated %}
+                                    <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="{% url 'login' %}">Sign in</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'register' %}">Sign up</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
             </div>
