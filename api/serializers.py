@@ -33,20 +33,20 @@ class ReviewSerializer(serializers.ModelSerializer):
     def get_likes(self, obj):
         return obj.get_likes()
 
-    def get_author_id(self, obj):
-        return obj.author.pk
+    def get_author_username(self, obj):
+        return obj.author.username
 
-    images = serializers.ListField(child=serializers.CharField())
-    author_id = serializers.SerializerMethodField()
-    author = serializers.SlugRelatedField(read_only=True, slug_field='username')
-    average_rating = serializers.SerializerMethodField()
-    likes = serializers.SerializerMethodField()
-
+    images = serializers.ListField(child=serializers.CharField(), required=False)
+    author_id = serializers.IntegerField(required=True)
+    author_username = serializers.SerializerMethodField(read_only=True)
+    average_rating = serializers.SerializerMethodField(read_only=True)
+    likes = serializers.SerializerMethodField(read_only=True)
+    created_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M", required=False)
 
     class Meta:
         model = Review
-        fields = ('id', 'title', 'text', 'group', 'images', 'author_id'
-                  'author', 'average_rating', 'likes', 'created_at')
+        fields = ('id', 'title', 'text', 'group', 'images', 'rating', 'author_id',
+                  'author_username', 'average_rating', 'likes', 'created_at')
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -57,14 +57,11 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_author(self, obj):
         return obj.author.username
 
-    def get_author_id(self, obj):
-        return obj.author.pk
-
     def get_review_id(self, obj):
         return obj.review.pk
 
     likes = serializers.SerializerMethodField()
-    author_id = serializers.SerializerMethodField()
+    author_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=True)
     author = serializers.SerializerMethodField()
     review_id = serializers.SerializerMethodField()
     created_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M", required=False)

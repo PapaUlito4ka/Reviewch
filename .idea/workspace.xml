@@ -4,12 +4,11 @@
     <list default="true" id="8cf746a2-15d9-4c79-b695-2c374adfb206" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewch/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewch/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,6 +44,7 @@
         <option value="HTML File" />
         <option value="CSS File" />
         <option value="Python Script" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -147,7 +147,9 @@
       <workItem from="1637004039142" duration="10774000" />
       <workItem from="1637079024041" duration="9494000" />
       <workItem from="1637097700199" duration="2716000" />
-      <workItem from="1637169846311" duration="12084000" />
+      <workItem from="1637169846311" duration="12470000" />
+      <workItem from="1637311138899" duration="10692000" />
+      <workItem from="1637573362730" duration="1646000" />
     </task>
     <servers />
   </component>

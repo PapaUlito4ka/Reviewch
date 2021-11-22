@@ -56,10 +56,17 @@ def user_publications_count(request: Request, pk: int):
 @api_view(['GET'])
 def user_average_rating(request: Request, pk: int):
     user = get_user_by_id(pk, 'reviews')
+    data: str
     if user.reviews.count() == 0:
-        data = 'empty'
+        data = 'None'
     else:
-        data = sum(review.get_average_rating() for review in user.reviews.all()) / user.reviews.count()
+        if not all(review.get_average_rating() for review in user.reviews.all()):
+            data = 'None'
+        else:
+            data = sum(
+                review.get_average_rating()
+                for review in user.reviews.all()
+                if review.get_average_rating()) / user.reviews.count()
     return Response({
         'data': data
     }, status=status.HTTP_200_OK)
@@ -80,6 +87,13 @@ def user_comments_count(request: Request, pk: int):
         'data': user.comments.count()
     }, status=status.HTTP_200_OK)
 
+
+@api_view(['GET'])
+def user_profile_reviews(request: Request, pk: int):
+    user = get_user_by_id(pk, 'reviews')
+    return Response({
+        'data': user.reviews
+    }, status=status.HTTP_200_OK)
 
 
 

@@ -14,7 +14,7 @@ import core.api_requests as api
 
 def home(request: HttpRequest):
     context = {
-        'session': request.session
+        'user': request.user
     }
     return render(request, 'home.html', context=context)
 
@@ -43,14 +43,14 @@ def register(request: HttpRequest):
 @login_required(login_url='/accounts/login')
 def profile(request: HttpRequest):
     context = {
-        'session': request.session
+        'user': request.user
     }
     return render(request, 'profile.html', context=context)
 
 
 def review(request: HttpRequest):
     context = {
-        'session': request.session
+        'user': request.user
     }
     return render(request, 'review.html', context=context)
 
