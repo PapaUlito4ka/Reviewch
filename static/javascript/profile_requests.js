@@ -49,7 +49,7 @@ function getUserReview(url, i) {
                     <td class="text-center">${review.group}</td>
                     <td class="text-center">${review.title}</td>
                     <td class="d-flex flex-row justify-content-around align-items-center">
-                        <a href="#" class="h5 m-0"><i class="bi bi-eye"></i></a>
+                        <a href="/review/${review.id}/" class="h5 m-0"><i class="bi bi-eye"></i></a>
                         <a href="#" class="h5 m-0"><i class="bi bi-pencil-square"></i></a>
                         <a href="#" class="h5 m-0"><i class="bi bi-trash"></i></a>
                     </td>

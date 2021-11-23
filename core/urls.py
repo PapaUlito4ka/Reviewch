@@ -11,5 +11,6 @@ urlpatterns = [
         redirect_authenticated_user=True), name='login'),
     path('accounts/register', views.register, name='register'),
     path('profile/', views.profile, name='profile'),
-    path('review/', views.review, name='review'),
+    path('review/<int:id>/', views.review, name='review'),
+    path('create_review/', views.create_review, name='create_review'),
 ]

@@ -7,7 +7,7 @@ import django
 import rest_framework.status as status
 from django.urls import reverse
 
-from core.forms import RegisterForm
+import core.forms as forms
 from core.models import User
 import core.api_requests as api
 
@@ -27,10 +27,10 @@ def register(request: HttpRequest):
     if request.method == 'GET':
         if context['user'].is_authenticated:
             return redirect(reverse('profile'))
-        context['form'] = RegisterForm()
+        context['form'] = forms.RegisterForm()
         return render(request, 'register.html', context=context)
     if request.method == 'POST':
-        context['form'] = RegisterForm(request.POST)
+        context['form'] = forms.RegisterForm(request.POST)
         if context['form'].is_valid():
             res = api.create_user(request.POST)
             if res.status_code == status.HTTP_201_CREATED:
@@ -48,11 +48,33 @@ def profile(request: HttpRequest):
     return render(request, 'profile.html', context=context)
 
 
-def review(request: HttpRequest):
+def review(request: HttpRequest, id: int):
+    context = {
+        'user': request.user,
+        'review_id': id
+    }
+    return render(request, 'review.html', context=context)
+
+
+@login_required(login_url='/accounts/login')
+def create_review(request: HttpRequest):
     context = {
         'user': request.user
     }
-    return render(request, 'review.html', context=context)
+    if request.method == 'GET':
+        context['form'] = forms.CreateReviewForm()
+        return render(request, 'create_review.html', context=context)
+    if request.method == 'POST':
+        context['form'] = forms.CreateReviewForm(request.POST, request.FILES)
+        if context['form'].is_valid():
+            res = api.create_review(request.POST)
+            if res.status_code == status.HTTP_201_CREATED:
+                res = api.create_review_images(res.json(), request.FILES)
+                if res.status_code == status.HTTP_201_CREATED:
+                    return redirect(reverse('profile'))
+            context['error'] = res.json()
+            return render(request, 'create_review.html', context=context)
+        return render(request, 'create_review.html', context=context)
 
 
 

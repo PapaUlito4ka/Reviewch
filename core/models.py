@@ -8,7 +8,6 @@ class Review(models.Model):
     title = models.CharField(max_length=128, null=False)
     text = models.TextField(null=False)
     group = models.CharField(max_length=10, null=False)
-    images = ArrayField(models.CharField(max_length=512, default=''), default=list)
     rating = models.IntegerField(null=False)
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
@@ -51,9 +50,16 @@ class UserReviewRating(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=32, null=False)
+    name = models.CharField(max_length=32, null=False, unique=True)
 
     reviews = models.ManyToManyField(Review, related_name='tags')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class UploadImage(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='image', null=True)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='images', null=True)
+    image = models.ImageField(upload_to='images/', null=False)
+

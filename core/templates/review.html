@@ -3,59 +3,70 @@
 
 {% block title %}Review name{% endblock %}
 
+{% block scripts %}
+    <script type="text/javascript" src="{% static 'javascript/review_requests.js' %}"></script>
+    <script>
+    $(function () {
+
+        render({{ review_id }});
+    })
+    </script>
+{% endblock %}
+
 {% block content %}
 
     <div class="cloud mt-3">
         <div class="row px-4 py-3">
             <div class="d-flex flex-row align-items-center mb-2">
-                <a href="#" class="d-flex"><img src="{% get_media_prefix %}user_profile.png" width="20" height="20"></a>
-                <a href="#" class="m-0 mx-2">Username</a>
-                <p class="m-0 mx-2 text-secondary">12.11.2001 13:54</p>
+                <a href="#" class="d-flex"><img src="{% get_media_prefix %}user_profile.png" width="20" height="20" alt="img"></a>
+                <a href="#" class="m-0 mx-2 review-author">Loading...</a>
+                <p class="m-0 mx-2 text-secondary review-created-at">Loading...</p>
             </div>
             <div class="d-flex flex-row mb-2">
-                <p class="m-0 fst-italic h4">Music</p>
+                <p class="m-0 fst-italic h4 review-group">Loading...</p>
             </div>
             <div class="d-flex flex-row mb-2">
-                <p class="m-0 fw-bold h4">Some very long title</p>
+                <p class="m-0 fw-bold h4 review-title">Loading...</p>
             </div>
-            <div class="d-flex flex-row mb-2">
-                <a href="#"><div class="blue-cloud me-1 px-2">Tag1</div></a>
-                <a href="#"><div class="blue-cloud mx-1 px-2">Tag2</div></a>
-                <a href="#"><div class="blue-cloud mx-1 px-2">Tag3</div></a>
+            <div class="d-flex flex-row mb-2 review-tags">
+                <p class="m-0">Loading...</p>
             </div>
-            <div class="d-flex flex-column mb-2">
-                <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <div class="d-flex flex-column mb-2 review-text">
+                <p class="m-0">Loading...</p>
             </div>
+
+            <div id="carouselExampleControls" class="carousel slide mb-2 review-carousel" data-bs-ride="carousel">
+              <div class="carousel-inner review-images">
+              </div>
+              <a class="carousel-control-prev" role="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </a>
+              <a class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </a>
+            </div>
+
             <div class="d-flex flex-row">
                 <div class="d-flex flex-row align-items-center">
                     <span class="h3 m-0 me-2"><i class="bi bi-star p-0"></i></span>
-                    <span class="p-0 me-4">4,4</span>
+                    <span class="p-0 me-4 review-average-rating">Loading...</span>
                     <span class="h3 m-0 me-2"><i class="bi bi-heart p-0"></i></span>
-                    <span class="p-0">123</span>
+                    <span class="p-0 review-likes">Loading...</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="cloud mt-3">
+    <div class="cloud mt-3 mb-2">
         <div class="row px-4 py-3">
             <div class="d-flex flex-row border-bottom">
                 <p class="fs-4">Comments</p>
             </div>
         </div>
-        <div class="row px-4 border-bottom">
-            <div class="d-flex flex-row align-items-center mb-2">
-                <a href="#" class="d-flex"><img src="{% get_media_prefix %}user_profile.png" width="20" height="20"></a>
-                <a href="#" class="m-0 mx-2">Username</a>
-                <p class="m-0 mx-2 text-secondary">12.11.2001 13:54</p>
-            </div>
-            <div class="d-flex flex-column mb-2">
-                <p class="m-0">Wow! That was very awesome!</p>
-            </div>
-            <div class="d-flex flex-row mb-2 align-items-center">
-                <span class="h3 m-0 me-2"><i class="bi bi-heart p-0"></i></span>
-                <span class="p-0">123</span>
-            </div>
+        <div class="row px-4 border-bottom review-comments">
+            <p>Loading...</p>
         </div>
 
     </div>

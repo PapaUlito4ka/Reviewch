@@ -1,5 +1,6 @@
 import requests
-import json
+import rest_framework.status as status
+
 from reviewch.settings import DEBUG
 
 BASE_URL = 'http://localhost:8000/api/'
@@ -10,4 +11,24 @@ if not DEBUG:
 def create_user(raw_data):
     url = f'{BASE_URL}users/'
     return requests.post(url, data=raw_data)
+
+
+def create_review(raw_data):
+    raw_data = raw_data.copy()
+    raw_data['tags'] = raw_data['tags'].split()
+    url = f'{BASE_URL}reviews/'
+    return requests.post(url, data=raw_data)
+
+
+def create_review_images(raw_data, files):
+    res = requests.Response()
+    data = dict()
+    data['review_id'] = raw_data['id']
+    for image in files.getlist('images'):
+        data['image'] = image
+        url = f'{BASE_URL}upload_images/'
+        res = requests.post(url, files=data)
+        if res.status_code != status.HTTP_201_CREATED:
+            break
+    return res
 

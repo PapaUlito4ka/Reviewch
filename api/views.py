@@ -27,6 +27,12 @@ class ReviewAPIViewSet(viewsets.ModelViewSet):
     queryset = models.Review.objects.all()
     serializer_class = serializers.ReviewSerializer
 
+    def create(self, request, *args, **kwargs):
+        tags_names = request.data.get('tags', [])
+        for tag_name in tags_names:
+            models.Tag.objects.get_or_create(name=tag_name)
+        return super().create(request, *args, **kwargs)
+
 
 class CommentAPIViewSet(viewsets.ModelViewSet):
     queryset = models.Comment.objects.all()
@@ -36,6 +42,19 @@ class CommentAPIViewSet(viewsets.ModelViewSet):
 class TagAPIViewSet(viewsets.ModelViewSet):
     queryset = models.Tag.objects.all()
     serializer_class = serializers.TagSerializer
+
+
+class UploadImageAPIViewSet(viewsets.ModelViewSet):
+    queryset = models.UploadImage.objects.all()
+    serializer_class = serializers.UploadImageSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            request.data['review_id'] = int(request.data['review_id'].read())
+            request.data['user_id'] = int(request.data['user_id'].read())
+        except:
+            pass
+        return super().create(request, *args, **kwargs)
 
 
 def get_user_by_id(pk: int, prefetch: str):

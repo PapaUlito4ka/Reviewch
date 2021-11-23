@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Create Review{% endblock %}
+
+{% block content %}
+
+    <div class="cloud mt-3 p-3 mb-3">
+        {% if form.errors %}
+            <p>Error during registration. Please try again.</p>
+        {% endif %}
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+        <form method="post" action="{% url 'create_review' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="id_title" class="form-label">{{ form.title.label }}</label>
+                {{ form.title|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                <label for="id_group" class="form-label">{{ form.group.label }}</label>
+                {{ form.group|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                <label for="id_text" class="form-label">{{ form.text.label }}</label>
+                {{ form.text|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                <label for="id_rating" class="form-label">{{ form.rating.label }}</label>
+                {{ form.rating|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                <label for="id_tags" class="form-label">{{ form.tags.label }}</label>
+                {{ form.tags|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                <label for="id_images" class="form-label">{{ form.images.label }}</label>
+                {{ form.images|add_class:"form-control" }}
+            </div>
+            <input type="hidden" name="author_id" value="{{ user.id }}">
+            <button type="submit" class="btn btn-primary">Submit</button>
+{#            <input type="hidden" name="next" value="{{ next }}">#}
+        </form>
+    </div>
+
+{% endblock %}
