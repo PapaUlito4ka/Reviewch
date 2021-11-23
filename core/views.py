@@ -2,13 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate
-import django
 import rest_framework.status as status
 from django.urls import reverse
+from django.contrib.auth import authenticate, login
 
 import core.forms as forms
-from core.models import User
 import core.api_requests as api
 
 
@@ -34,6 +32,12 @@ def register(request: HttpRequest):
         if context['form'].is_valid():
             res = api.create_user(request.POST)
             if res.status_code == status.HTTP_201_CREATED:
+                user = authenticate(
+                    request,
+                    username=request.POST.get('username'),
+                    password=request.POST.get('password')
+                )
+                login(request, user)
                 return redirect(reverse('profile'))
             context['error'] = res.json()
             return render(request, 'register.html', context=context)

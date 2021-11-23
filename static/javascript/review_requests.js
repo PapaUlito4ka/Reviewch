@@ -7,6 +7,7 @@ function getReview(url) {
             $('.review-created-at').html(json.created_at);
             $('.review-group').html(json.group);
             $('.review-title').html(json.title);
+            getAuthorImage(`/api/users/${json.author_id}/`, '.review-author-image');
 
             $('.review-tags').find(':first-child').remove();
             for (let i = 0; i < json.tags.length; i++) {
@@ -51,6 +52,18 @@ function getReview(url) {
     });
 }
 
+function getAuthorImage(url, selector) {
+    $.ajax({
+        url: url,
+        method: 'get',
+        success: function (json) {
+            $(selector).html(
+                `<img src="${json.image}" width="20" height="20" alt="img">`
+            );
+        }
+    });
+}
+
 function getReviewComment(url) {
     $.ajax({
         url: url,
@@ -58,7 +71,7 @@ function getReviewComment(url) {
         success: function (json) {
             $(`.review-comment-${json.id}`).append(
                 `<div class="d-flex flex-row align-items-center mb-2">
-                    <a href="#" class="d-flex"><img src="{% get_media_prefix %}user_profile.png" width="20" height="20"></a>
+                    <a href="#" class="d-flex comment-author-image-${json.id}"></a>
                     <a href="#" class="m-0 mx-2">${json.author_username}</a>
                     <p class="m-0 mx-2 text-secondary">${json.created_at}</p>
                 </div>
@@ -70,6 +83,7 @@ function getReviewComment(url) {
                     <span class="p-0">${json.likes}</span>
                 </div>`
             );
+            getAuthorImage(`/api/users/${json.author_id}`, `.comment-author-image-${json.id}`);
         }
     });
 }

@@ -6,6 +6,10 @@ from core.models import Review, Comment, Tag, User, UploadImage
 
 class UserSerializer(serializers.ModelSerializer):
 
+    def get_image(self, obj):
+        return obj.image.image.url
+
+    image = serializers.SerializerMethodField(read_only=True)
     reviews = serializers.PrimaryKeyRelatedField(
         many=True, read_only=True
     )
@@ -13,25 +17,28 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'email',
-                  'is_staff', 'reviews', 'last_login', 'date_joined')
+        fields = ('id', 'username', 'password', 'email', 'image',
+                  'is_staff', 'reviews', 'date_joined')
         extra_kwargs = {
             'password': {'write_only': True},
             'email': {'required': True}
         }
 
     def create(self, validated_data):
-        validated_data['password'] = make_password(validated_data['password'])
-        return super(UserSerializer, self).create(validated_data)
+        user = User(
+            email=validated_data['email'],
+            username=validated_data['username'],
+            is_staff=validated_data['is_staff']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        UploadImage.objects.create(
+            user=user
+        )
+        return user
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-
-    def get_average_rating(self, obj):
-        return obj.get_average_rating()
-
-    def get_likes(self, obj):
-        return obj.get_likes()
 
     def get_author_username(self, obj):
         return obj.author.username
@@ -42,8 +49,8 @@ class ReviewSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField(read_only=True)
     author_id = serializers.IntegerField(required=True)
     author_username = serializers.SerializerMethodField(read_only=True)
-    average_rating = serializers.SerializerMethodField(read_only=True)
-    likes = serializers.SerializerMethodField(read_only=True)
+    average_rating = serializers.FloatField(read_only=True)
+    likes = serializers.IntegerField(read_only=True)
     tags = serializers.SlugRelatedField(
         many=True, queryset=Tag.objects.all(), slug_field='name', allow_empty=True
     )
@@ -60,16 +67,13 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
 
-    def get_likes(self, obj):
-        return obj.get_likes()
-
     def get_author_username(self, obj):
         return obj.author.username
 
     def get_review_id(self, obj):
         return obj.review.pk
 
-    likes = serializers.SerializerMethodField(read_only=True)
+    likes = serializers.IntegerField(read_only=True)
     author_id = serializers.IntegerField(required=True)
     author_username = serializers.SerializerMethodField(read_only=True)
     review_id = serializers.IntegerField(required=True)
@@ -85,11 +89,12 @@ class TagSerializer(serializers.ModelSerializer):
     reviews = serializers.PrimaryKeyRelatedField(
         many=True, read_only=True
     )
+    reviews_count = serializers.IntegerField(read_only=True)
     created_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M", required=False)
 
     class Meta:
         model = Tag
-        fields = ('id', 'name', 'reviews', 'created_at')
+        fields = ('id', 'name', 'reviews', 'reviews_count', 'created_at')
 
 
 class UploadImageSerializer(serializers.ModelSerializer):
@@ -101,10 +106,3 @@ class UploadImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = UploadImage
         fields = ('id', 'user_id', 'review_id', 'image')
-
-    def validate_user_id(self, value):
-        print(value)
-        try:
-            return int(value)
-        except ValueError:
-            raise serializers.ValidationError('You must supply an integer')

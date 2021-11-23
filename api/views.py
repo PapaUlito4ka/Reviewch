@@ -1,5 +1,3 @@
-from functools import reduce
-
 from django.http import HttpRequest, Http404
 from django.shortcuts import render
 import rest_framework.views as views
@@ -7,12 +5,12 @@ import rest_framework.generics as generics
 import rest_framework.viewsets as viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework import authentication
-from django.db.models import Avg
+from django.db.models import Avg, Count
+from django.db.models import Prefetch
 import rest_framework.status as status
 
 from rest_framework.decorators import api_view
-
+from rest_framework import filters
 
 import api.serializers as serializers
 import core.models as models
@@ -21,11 +19,26 @@ import core.models as models
 class UserAPIViewSet(viewsets.ModelViewSet):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['username', 'is_staff']
+    ordering_fields = ['username']
+    ordering = ['username']
 
 
 class ReviewAPIViewSet(viewsets.ModelViewSet):
-    queryset = models.Review.objects.all()
+    p1 = Prefetch('author')
+    p2 = Prefetch('user_ratings')
+    p3 = Prefetch('user_likes')
+    p4 = Prefetch('comments')
+    queryset = models.Review.objects.prefetch_related(p1, p2, p3, p4)\
+        .annotate(average_rating=Avg('userreviewrating__rating'))\
+        .annotate(likes=Count('user_likes'))
     serializer_class = serializers.ReviewSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title', 'text', 'group',
+                     'author__username', 'comments__text']
+    ordering_fields = ['-created_at', '-average_rating', '-likes']
+    ordering = ['-created_at']
 
     def create(self, request, *args, **kwargs):
         tags_names = request.data.get('tags', [])
@@ -35,13 +48,27 @@ class ReviewAPIViewSet(viewsets.ModelViewSet):
 
 
 class CommentAPIViewSet(viewsets.ModelViewSet):
-    queryset = models.Comment.objects.all()
+    p1 = Prefetch('author')
+    p2 = Prefetch('user_likes')
+    p3 = Prefetch('review')
+    queryset = models.Comment.objects.prefetch_related(p1, p2, p3)\
+        .annotate(likes=Count('user_likes'))
     serializer_class = serializers.CommentSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['text', 'author__username']
+    ordering_fields = ['-created_at', '-likes']
+    ordering = ['-created_at']
 
 
 class TagAPIViewSet(viewsets.ModelViewSet):
-    queryset = models.Tag.objects.all()
+    p1 = Prefetch('reviews')
+    queryset = models.Tag.objects.prefetch_related(p1)\
+        .annotate(reviews_count=Count('reviews'))
     serializer_class = serializers.TagSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = ['name', '-reviews_count']
+    ordering = ['-reviews_count']
 
 
 class UploadImageAPIViewSet(viewsets.ModelViewSet):

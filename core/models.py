@@ -61,5 +61,5 @@ class Tag(models.Model):
 class UploadImage(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='image', null=True)
     review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='images', null=True)
-    image = models.ImageField(upload_to='images/', null=False)
+    image = models.ImageField(upload_to='images/', default='user_profile.png')
 

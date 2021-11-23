@@ -17,7 +17,7 @@
     <div class="flex-fill d-flex mt-3">
         <div class="col-3 flex-fill d-flex flex-column cloud justify-content-center me-3 p-2">
             <p class="fs-5 text-center">{{ user.username }}</p>
-            <img src="{% get_media_prefix %}user_profile.png" class="img-fluid img-rounded">
+            <img src="{{ user.image.image.url }}" class="img-fluid img-rounded">
             <div class="d-flex justify-content-between">
                 <p>Publications</p>
                 <span class="publication-count">Loading...</span>

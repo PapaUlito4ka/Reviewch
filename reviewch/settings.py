@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-=1hoi%508+_mj3ulbt(7(%^-+!&9l)3*n@+*h-9=0j6*2k7*@g
 PRODUCTION = False
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = not True
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'rest_framework',
     'widget_tweaks',
-    'django_cleanup.apps.CleanupConfig'
+    'django_cleanup.apps.CleanupConfig',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
