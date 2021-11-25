@@ -82,7 +82,6 @@ function getUserReviews(url) {
     })
 }
 
-
 function render(userId) {
     getUserPublicationsCount(`/api/users/${userId}/publications_count`);
     getUserAverageRating(`/api/users/${userId}/average_rating`);

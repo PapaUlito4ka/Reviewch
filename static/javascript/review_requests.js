@@ -52,6 +52,22 @@ function getReview(url) {
     });
 }
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 function getAuthorImage(url, selector) {
     $.ajax({
         url: url,
@@ -88,6 +104,92 @@ function getReviewComment(url) {
     });
 }
 
-function render(reviewId) {
+function likeReview(url, reviewId, userId) {
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url: url,
+        method: 'put',
+        data: {
+            'user_id': userId
+        },
+        headers: {'X-CSRFToken': csrftoken },
+        success: function (json) {
+            $('.review-likes').html(json.data);
+            changeLikeReviewButtonIcon(`/api/reviews/${reviewId}/has_liked/?user_id=${userId}`);
+        }
+    });
+}
+
+function changeLikeReviewButtonIcon(url) {
+    $.ajax({
+        url: url,
+        method: 'get',
+        success: function (json) {
+            let likeIcon = $('.review-like-icon');
+            if (json.data) {
+                likeIcon.removeClass('bi-heart');
+                likeIcon.addClass('bi-heart-fill');
+            } else {
+                likeIcon.removeClass('bi-heart-fill');
+                likeIcon.addClass('bi-heart');
+            }
+        }
+    });
+}
+
+function rateReview(url, reviewId, userId, rating) {
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url: url,
+        method: 'put',
+        data: {
+            'user_id': userId,
+            'rating': rating
+        },
+        headers: {'X-CSRFToken': csrftoken },
+        success: function (json) {
+            $('.review-average-rating').html(json.data);
+            changeRateReviewButtonIcon(`/api/reviews/${reviewId}/has_rated/?user_id=${userId}`);
+        }
+    })
+}
+
+function changeRateReviewButtonIcon(url) {
+    $.ajax({
+        url: url,
+        method: 'get',
+        success: function (json) {
+            if (!json.data) {
+                $("input[type='radio']").each(function () {
+                    $(this).prop('checked', false);
+                });
+                return;
+            }
+            $(`#star${json.data}`).prop('checked', true);
+        }
+    });
+}
+
+function likeComment(url, userId) {
+    $.ajax({
+        url: url,
+        method: 'put',
+        data: {
+            'user_id': userId
+        }
+    });
+}
+
+function render(reviewId, userId) {
     getReview(`/api/reviews/${reviewId}/`);
+    changeLikeReviewButtonIcon(`/api/reviews/${reviewId}/has_liked/?user_id=${userId}`);
+    changeRateReviewButtonIcon(`/api/reviews/${reviewId}/has_rated/?user_id=${userId}`);
+    $('.like-button').click(function (e) {
+        e.preventDefault();
+        likeReview(`/api/reviews/${reviewId}/like/`, reviewId, userId);
+    });
+    $("input[type='radio']").click(function () {
+        let rating = $("input[type='radio']:checked").val();
+        rateReview(`/api/reviews/${reviewId}/rate/`, reviewId, userId, rating);
+    });
 }

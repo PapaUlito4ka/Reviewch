@@ -8,9 +8,58 @@
     <script>
     $(function () {
 
-        render({{ review_id }});
+        render({{ review_id }}, {{ user.id }});
     })
     </script>
+{% endblock %}
+
+{% block styles %}
+<style>
+.rating {
+    border: none;
+}
+
+.rating>[id^="star"] {
+    display: none
+}
+
+.rating>label:before {
+    margin: 5px;
+    font-size: 2.25em;
+    display: inline-block;
+}
+
+.rating>.half:before {
+    content: "\f089";
+    position: absolute
+}
+
+.rating>label {
+    color: #ddd;
+    float: right
+}
+
+.rating>[id^="star"]:checked~label,
+.rating:not(:checked)>label:hover,
+.rating:not(:checked)>label:hover~label {
+    color: #FFD700
+}
+
+.rating>[id^="star"]:checked+label:hover,
+.rating>[id^="star"]:checked~label:hover,
+.rating>label:hover~[id^="star"]:checked~label,
+.rating>[id^="star"]:checked~label:hover~label {
+    color: #FFED85
+}
+
+p {
+    font-size: 14px
+}
+
+h4 {
+    margin-top: 18px
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -50,9 +99,20 @@
 
             <div class="d-flex flex-row">
                 <div class="d-flex flex-row align-items-center">
-                    <span class="h3 m-0 me-2"><i class="bi bi-star p-0"></i></span>
+                    <fieldset class="rating me-2">
+                        <input type="radio" id="star5" name="rating" value="5" />
+                        <label class="full h3" for="star5"><i class="bi bi-star p-0"></i></label>
+                        <input type="radio" id="star4" name="rating" value="4" />
+                        <label class="full h3" for="star4"><i class="bi bi-star p-0"></i></label>
+                        <input type="radio" id="star3" name="rating" value="3" />
+                        <label class="full h3" for="star3"><i class="bi bi-star p-0"></i></label>
+                        <input type="radio" id="star2" name="rating" value="2" />
+                        <label class="full h3" for="star2"><i class="bi bi-star p-0"></i></label>
+                        <input type="radio" id="star1" name="rating" value="1" />
+                        <label class="full h3" for="star1"><i class="bi bi-star p-0"></i></label>
+                    </fieldset>
                     <span class="p-0 me-4 review-average-rating">Loading...</span>
-                    <span class="h3 m-0 me-2"><i class="bi bi-heart p-0"></i></span>
+                    <a href="#" class="h3 m-0 me-2 like-button"><i class="bi bi-heart p-0 review-like-icon"></i></a>
                     <span class="p-0 review-likes">Loading...</span>
                 </div>
             </div>

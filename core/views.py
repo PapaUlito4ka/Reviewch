@@ -12,7 +12,9 @@ import core.api_requests as api
 
 def home(request: HttpRequest):
     context = {
-        'user': request.user
+        'user': request.user,
+        'ordering': request.GET.get('ordering', 'created_at'),
+        'group': request.GET.get('group', '')
     }
     return render(request, 'home.html', context=context)
 
