@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block title %}Review name{% endblock %}
 
@@ -65,6 +66,12 @@ h4 {
 {% block content %}
 
     <div class="cloud mt-3">
+        {% if form.errors %}
+            <p>Error during comment posting. Please try again.</p>
+        {% endif %}
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
         <div class="row px-4 py-3">
             <div class="d-flex flex-row align-items-center mb-2">
                 <a href="#" class="d-flex review-author-image">Loading...</a>
@@ -119,7 +126,7 @@ h4 {
         </div>
     </div>
 
-    <div class="cloud mt-3 mb-2">
+    <div class="cloud mt-3">
         <div class="row px-4 py-3">
             <div class="d-flex flex-row border-bottom">
                 <p class="fs-4">Comments</p>
@@ -128,7 +135,19 @@ h4 {
         <div class="row px-4 border-bottom review-comments">
             <p>Loading...</p>
         </div>
+    </div>
 
+    <div class="cloud mt-3 p-3 mb-3">
+        <h2>Leave comment</h2>
+        <form class="leave-comment-form" method="post" action="{% url 'review' review_id %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.text|add_class:"form-control" }}
+            </div>
+            <input type="hidden" name="author_id" class="author-id">
+            <input type="hidden" name="review_id" class="review-id" value="{{ review_id }}">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
 
 {% endblock %}

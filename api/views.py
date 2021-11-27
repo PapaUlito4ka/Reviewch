@@ -11,6 +11,7 @@ from rest_framework import filters
 
 import api.serializers as serializers
 import core.models as models
+from api.pagination import UserPagination, ReviewPagination, TagPagination
 
 
 class UserAPIViewSet(viewsets.ModelViewSet):
@@ -20,6 +21,7 @@ class UserAPIViewSet(viewsets.ModelViewSet):
     search_fields = ['username', 'is_staff']
     ordering_fields = ['username']
     ordering = ['username']
+    pagination_class = UserPagination
 
     def get_user_by_id(self, pk: int):
         try:
@@ -78,10 +80,11 @@ class ReviewAPIViewSet(viewsets.ModelViewSet):
         .annotate(likes=Count('user_likes'))
     serializer_class = serializers.ReviewSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    filterset_fields = ['group', 'tags__name', 'author__username']
+    filterset_fields = ['group', 'tags__name', 'author__username', 'author__id']
     search_fields = ['title', 'text', 'comments__text']
     ordering_fields = ['created_at', 'average_rating', 'likes']
     ordering = ['-created_at']
+    pagination_class = ReviewPagination
 
     def create(self, request, *args, **kwargs):
         tags_names = request.data.get('tags', [])
@@ -187,11 +190,22 @@ class CommentAPIViewSet(viewsets.ModelViewSet):
         except:
             # like
             comment.user_likes.add(user)
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(data={'data': comment.get_likes()}, status=status.HTTP_200_OK)
         else:
             # dislike
             comment.user_likes.remove(user)
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(data={'data': comment.get_likes()}, status=status.HTTP_200_OK)
+
+    @action(methods=['get'], detail=True, url_name='has_liked')
+    def has_liked(self, request: Request, pk: int = None):
+        user = models.User.objects.get(id=request.query_params.get('user_id'))
+        comment = self.get_comment_by_id(pk)
+        try:
+            comment.user_likes.get(id=user.id)
+        except:
+            return Response(data={'data': False}, status=status.HTTP_200_OK)
+        else:
+            return Response(data={'data': True}, status=status.HTTP_200_OK)
 
 
 class TagAPIViewSet(viewsets.ModelViewSet):
@@ -203,6 +217,7 @@ class TagAPIViewSet(viewsets.ModelViewSet):
     search_fields = ['name']
     ordering_fields = ['name', 'reviews_count']
     ordering = ['-reviews_count']
+    pagination_class = TagPagination
 
 
 class UploadImageAPIViewSet(viewsets.ModelViewSet):

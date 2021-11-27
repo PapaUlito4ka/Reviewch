@@ -5,6 +5,7 @@ import core.views as views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('search/', views.search, name='search'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/login', LoginView.as_view(
         template_name='login.html',
@@ -13,4 +14,5 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('review/<int:id>/', views.review, name='review'),
     path('create_review/', views.create_review, name='create_review'),
+    path('tags/', views.tags, name='tags'),
 ]

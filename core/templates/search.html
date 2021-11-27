@@ -8,9 +8,9 @@
 <script>
     $(function () {
         {% if user.is_authenticated %}
-            render({{ user.id }}, '{{ search }}', '{{ ordering }}', '{{ group }}', {{ page }});
+            render({{ user.id }}, '{{ search }}', '{{ ordering }}', '{{ group }}', '{{ page }}');
         {% else %}
-            render(null, '{{ search }}', '{{ ordering }}', '{{ group }}', {{ page }});
+            render(null, '{{ search }}', '{{ ordering }}', '{{ group }}', '{{ page }}');
         {% endif %}
     })
 </script>
@@ -22,19 +22,19 @@
         <div class="d-flex flex-row justify-content-around">
             <button class="btn p-0 border-0 latest-order {% if ordering == '-created_at' %}btn-info{% endif %}"><h2 class="text-center p-3 m-0">Latest articles</h2></button>
             <button class="btn p-0 border-0 rating-order {% if ordering == '-average_rating' %}btn-info{% endif %}"><h2 class="text-center p-3 m-0">Most rating</h2></button>
-            <button class="btn p-0 border-0" onclick="window.location.href='/tags/'"><h2 class="text-center p-3 m-0">Tag cloud</h2></button>
         </div>
         <div class="border-bottom"></div>
         <div class="d-flex flex-row justify-content-around">
-            <button class="btn p-0 border-0 movies-group {% if group == 'Movies' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Movies</h2></button>
-            <button class="btn p-0 border-0 games-group {% if group == 'Games' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Games</h2></button>
-            <button class="btn p-0 border-0 books-group {% if group == 'Books' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Books</h2></button>
+            <button class="btn p-0 border-0 movies-group {% if group == 'Movie' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Movies</h2></button>
+            <button class="btn p-0 border-0 games-group {% if group == 'Game' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Games</h2></button>
+            <button class="btn p-0 border-0 books-group {% if group == 'Book' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Books</h2></button>
             <button class="btn p-0 border-0 music-group {% if group == 'Music' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Music</h2></button>
             <button class="btn p-0 border-0 sport-group {% if group == 'Sport' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Sport</h2></button>
         </div>
     </div>
 
-    <div class="reviews"></div>
+    <div class="cloud mt-3 reviews">
+    </div>
 
     <div class="mt-3 d-flex justify-content-center">
         <nav aria-label="cloud mt-3">

@@ -10,14 +10,19 @@ if not DEBUG:
 
 def create_user(raw_data):
     url = f'{BASE_URL}users/'
-    return requests.post(url, data=raw_data)
+    return requests.post(url, json=raw_data)
 
 
 def create_review(raw_data):
     raw_data = raw_data.copy()
     raw_data['tags'] = raw_data['tags'].split()
     url = f'{BASE_URL}reviews/'
-    return requests.post(url, data=raw_data)
+    return requests.post(url, json=raw_data)
+
+
+def create_comment(raw_data):
+    url = f'{BASE_URL}comments/'
+    return requests.post(url, json=raw_data)
 
 
 def create_review_images(raw_data, files):

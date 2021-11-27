@@ -1,4 +1,4 @@
-function getReview(url) {
+function getReview(url, userId) {
     $.ajax({
         url: url,
         method: 'get',
@@ -7,6 +7,7 @@ function getReview(url) {
             $('.review-created-at').html(json.created_at);
             $('.review-group').html(json.group);
             $('.review-title').html(json.title);
+            $('.author-id').prop('value', json.author_id);
             getAuthorImage(`/api/users/${json.author_id}/`, '.review-author-image');
 
             $('.review-tags').find(':first-child').remove();
@@ -38,18 +39,22 @@ function getReview(url) {
             $('.review-average-rating').html(json.average_rating);
             $('.review-likes').html(json.likes);
 
-            if (json.comments.length === 0) {
-                $('.review-comments').find(':first-child').html('No comments');
-            }
-            else {
-                $('.review-comments').find(':first-child').remove();
-            }
-            for (let i = 0; i < json.comments.length; i++) {
-                $('.review-comments').append(`<div class="review-comment-${json.comments[i]}"></div>`)
-                getReviewComment(`/api/comments/${json.comments[i]}/`);
-            }
+            getReviewComments(json.comments, userId);
         }
     });
+}
+
+function getReviewComments(comments, userId) {
+    if (comments.length === 0) {
+        $('.review-comments').find(':first-child').html('No comments');
+    }
+    else {
+        $('.review-comments').find(':first-child').remove();
+    }
+    for (let i = 0; i < comments.length; i++) {
+        $('.review-comments').append(`<div class="review-comment-${comments[i]}"></div>`);
+        getReviewComment(`/api/comments/${comments[i]}/`, userId);
+    }
 }
 
 function getCookie(name) {
@@ -80,7 +85,7 @@ function getAuthorImage(url, selector) {
     });
 }
 
-function getReviewComment(url) {
+function getReviewComment(url, userId) {
     $.ajax({
         url: url,
         method: 'get',
@@ -95,10 +100,15 @@ function getReviewComment(url) {
                     <p class="m-0">${json.text}</p>
                 </div>
                 <div class="d-flex flex-row mb-2 align-items-center">
-                    <span class="h3 m-0 me-2"><i class="bi bi-heart p-0"></i></span>
-                    <span class="p-0">${json.likes}</span>
+                    <a href="#" class="h3 m-0 me-2 comment-${json.id}-like-button"><i class="bi bi-heart p-0 comment-${json.id}-like-icon"></i></a>
+                    <span class="p-0 comment-${json.id}-likes">${json.likes}</span>
                 </div>`
             );
+            $(`.comment-${json.id}-like-button`).click(function (e) {
+                e.preventDefault();
+                likeComment(`/api/comments/${json.id}/like/`, json.id, userId);
+            });
+            changeLikeCommentButtonIcon(`/api/comments/${json.id}/has_liked?user_id=${userId}`, json.id);
             getAuthorImage(`/api/users/${json.author_id}`, `.comment-author-image-${json.id}`);
         }
     });
@@ -170,18 +180,41 @@ function changeRateReviewButtonIcon(url) {
     });
 }
 
-function likeComment(url, userId) {
+function likeComment(url, commentId, userId) {
+    const csrftoken = getCookie('csrftoken');
     $.ajax({
         url: url,
         method: 'put',
         data: {
             'user_id': userId
+        },
+        headers: {'X-CSRFToken': csrftoken },
+        success: function (json) {
+            $(`.comment-${commentId}-likes`).html(json.data);
+            changeLikeCommentButtonIcon(`/api/comments/${commentId}/has_liked/?user_id=${userId}`, commentId);
+        }
+    });
+}
+
+function changeLikeCommentButtonIcon(url, commentId) {
+    $.ajax({
+        url: url,
+        method: 'get',
+        success: function (json) {
+            let commentIcon = $(`.comment-${commentId}-like-icon`);
+            if (json.data) {
+                commentIcon.removeClass('bi-heart');
+                commentIcon.addClass('bi-heart-fill');
+            } else {
+                commentIcon.removeClass('bi-heart-fill');
+                commentIcon.addClass('bi-heart');
+            }
         }
     });
 }
 
 function render(reviewId, userId) {
-    getReview(`/api/reviews/${reviewId}/`);
+    getReview(`/api/reviews/${reviewId}/`, userId);
     changeLikeReviewButtonIcon(`/api/reviews/${reviewId}/has_liked/?user_id=${userId}`);
     changeRateReviewButtonIcon(`/api/reviews/${reviewId}/has_rated/?user_id=${userId}`);
     $('.like-button').click(function (e) {

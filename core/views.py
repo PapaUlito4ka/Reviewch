@@ -14,10 +14,21 @@ def home(request: HttpRequest):
     context = {
         'user': request.user,
         'ordering': request.GET.get('ordering', 'created_at'),
-        'group': request.GET.get('group', '')
+        'group': request.GET.get('group', ''),
+        'page': request.GET.get('page', 1)
     }
     return render(request, 'home.html', context=context)
 
+
+def search(request: HttpRequest):
+    context = {
+        'user': request.user,
+        'ordering': request.GET.get('ordering', 'created_at'),
+        'group': request.GET.get('group', ''),
+        'search': request.GET.get('q', ''),
+        'page': request.GET.get('page', 1)
+    }
+    return render(request, 'search.html', context=context)
 
 @csrf_exempt
 def register(request: HttpRequest):
@@ -57,9 +68,21 @@ def profile(request: HttpRequest):
 def review(request: HttpRequest, id: int):
     context = {
         'user': request.user,
-        'review_id': id
+        'review_id': id,
+        'form': forms.CommentForm()
     }
-    return render(request, 'review.html', context=context)
+    if request.method == 'GET':
+        context['form'] = forms.CommentForm()
+        return render(request, 'review.html', context=context)
+    if request.method == 'POST' and request.user.is_authenticated:
+        context['form'] = forms.CommentForm(request.POST)
+        if context['form'].is_valid():
+            res = api.create_comment(request.POST)
+            if res.status_code == status.HTTP_201_CREATED:
+                return redirect(reverse('review', kwargs={'id': id}))
+            context['error'] = res.json()
+            return render(request, 'review.html', context=context)
+        return render(request, 'review.html', context=context)
 
 
 @login_required(login_url='/accounts/login')
@@ -81,6 +104,13 @@ def create_review(request: HttpRequest):
             context['error'] = res.json()
             return render(request, 'create_review.html', context=context)
         return render(request, 'create_review.html', context=context)
+
+
+def tags(request: HttpRequest):
+    context = {
+        'user': request.user
+    }
+    return render(request, 'tags.html', context=context)
 
 
 
