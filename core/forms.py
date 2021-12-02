@@ -21,6 +21,9 @@ class RegisterForm(forms.Form):
 
 
 class CreateReviewForm(forms.Form):
+    user = forms.CharField(
+        widget=forms.Select(choices=[(user.username, user.username) for user in User.objects.all()])
+    )
     title = forms.CharField()
     group = forms.CharField(
         widget=forms.Select(choices=CreateReviewGroups)
@@ -36,7 +39,8 @@ class CreateReviewForm(forms.Form):
         widget=forms.ClearableFileInput(attrs={
             'multiple': True,
             'accept': 'image/*'
-        })
+        }),
+        required=False
     )
 
 

@@ -8,11 +8,13 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'icons-1.4.1/font/bootstrap-icons.css' %}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
     {% block styles %}{% endblock %}
 
     <script type="text/javascript" src="{% static 'jquery/jquery-3.5.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     {% block scripts %}{% endblock %}
 
 </head>
@@ -39,7 +41,7 @@
 
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 {% if user.is_authenticated %}
-                                    <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'profile' user.id %}">Profile</a></li>
                                     <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                                 {% else %}
                                     <li><a class="dropdown-item" href="{% url 'login' %}">Sign in</a></li>

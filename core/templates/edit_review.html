@@ -4,15 +4,6 @@
 
 {% block title %}Create Review{% endblock %}
 
-{% block scripts %}
-    <script type="text/javascript" src="{% static 'javascript/create_review_requests.js' %}"></script>
-    <script>
-    $(function () {
-        render();
-    })
-    </script>
-{% endblock %}
-
 {% block content %}
 
     <div class="cloud mt-3 p-3 mb-3">
@@ -22,7 +13,7 @@
         {% if error %}
             <p>{{ error }}</p>
         {% endif %}
-        <form method="post" action="{% url 'create_review' %}" enctype="multipart/form-data">
+        <form method="post" action="{% url 'edit_review' review_id %}" enctype="multipart/form-data">
             {% csrf_token %}
 
             <div class="mb-3" {% if user.is_staff %}{% else %}hidden{% endif %}>
@@ -54,6 +45,7 @@
                 {{ form.images|add_class:"form-control" }}
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="reset" class="btn btn-default pull-right" onclick="window.location.href='/profile'">Cancel</button>
         </form>
     </div>
 

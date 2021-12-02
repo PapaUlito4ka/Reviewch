@@ -9,15 +9,16 @@ function getReview(url, userId) {
             $('.review-title').html(json.title);
             $('.author-id').prop('value', json.author_id);
             getAuthorImage(`/api/users/${json.author_id}/`, '.review-author-image');
+            setReviewRating(json.rating);
 
             $('.review-tags').find(':first-child').remove();
             for (let i = 0; i < json.tags.length; i++) {
                 $('.review-tags').append(
-                    `<a href="#"><div class="blue-cloud me-1 px-2">${json.tags[i]}</div></a>`
+                    `<a href="/search/?q=${encodeURIComponent('[' + json.tags[i] + ']')}"><div class="blue-cloud me-1 px-2">${json.tags[i]}</div></a>`
                 );
             }
 
-            $('.review-text').html(json.text);
+            $('.review-text').html(json.text_markdown);
             if (json.images.length === 0) {
                 $('.review-carousel').remove();
             }
@@ -57,6 +58,17 @@ function getReviewComments(comments, userId) {
     }
 }
 
+function setReviewRating(rating) {
+    let ratingTag = $('.review-rating');
+    let i = 0;
+    for (i = 0; i < rating; i++) {
+        ratingTag.append(`<span class="h3 m-0 me-2"><i class="bi bi-star-fill p-0"></i></span>`);
+    }
+    for ( ; i < 10; i++) {
+        ratingTag.append(`<span class="h3 m-0 me-2"><i class="bi bi-star p-0"></i></span>`);
+    }
+}
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -92,23 +104,29 @@ function getReviewComment(url, userId) {
         success: function (json) {
             $(`.review-comment-${json.id}`).append(
                 `<div class="d-flex flex-row align-items-center mb-2">
-                    <a href="#" class="d-flex comment-author-image-${json.id}"></a>
-                    <a href="#" class="m-0 mx-2">${json.author_username}</a>
+                    <a href="/profile/${json.id}" class="d-flex comment-author-image-${json.id}"></a>
+                    <a href="/profile/${json.id}" class="m-0 mx-2">${json.author_username}</a>
                     <p class="m-0 mx-2 text-secondary">${json.created_at}</p>
                 </div>
                 <div class="d-flex flex-column mb-2">
                     <p class="m-0">${json.text}</p>
                 </div>
                 <div class="d-flex flex-row mb-2 align-items-center">
-                    <a href="#" class="h3 m-0 me-2 comment-${json.id}-like-button"><i class="bi bi-heart p-0 comment-${json.id}-like-icon"></i></a>
+                    ${
+                        userId 
+                            ? `<a href="#" class="h3 m-0 me-2 comment-${json.id}-like-button"><i class="bi bi-heart p-0 comment-${json.id}-like-icon"></i></a>`
+                            : `<span class="h3 m-0 me-2"><i class="bi bi-heart p-0"></i></span>`
+                    }
                     <span class="p-0 comment-${json.id}-likes">${json.likes}</span>
                 </div>`
             );
+
             $(`.comment-${json.id}-like-button`).click(function (e) {
                 e.preventDefault();
                 likeComment(`/api/comments/${json.id}/like/`, json.id, userId);
             });
-            changeLikeCommentButtonIcon(`/api/comments/${json.id}/has_liked?user_id=${userId}`, json.id);
+            if (userId)
+                changeLikeCommentButtonIcon(`/api/comments/${json.id}/has_liked?user_id=${userId}`, json.id);
             getAuthorImage(`/api/users/${json.author_id}`, `.comment-author-image-${json.id}`);
         }
     });
@@ -215,8 +233,10 @@ function changeLikeCommentButtonIcon(url, commentId) {
 
 function render(reviewId, userId) {
     getReview(`/api/reviews/${reviewId}/`, userId);
-    changeLikeReviewButtonIcon(`/api/reviews/${reviewId}/has_liked/?user_id=${userId}`);
-    changeRateReviewButtonIcon(`/api/reviews/${reviewId}/has_rated/?user_id=${userId}`);
+    if (userId) {
+        changeLikeReviewButtonIcon(`/api/reviews/${reviewId}/has_liked/?user_id=${userId}`);
+        changeRateReviewButtonIcon(`/api/reviews/${reviewId}/has_rated/?user_id=${userId}`);
+    }
     $('.like-button').click(function (e) {
         e.preventDefault();
         likeReview(`/api/reviews/${reviewId}/like/`, reviewId, userId);

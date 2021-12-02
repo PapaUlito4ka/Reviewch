@@ -2,11 +2,13 @@
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import User
 from django.db import models
+from markdown import markdown
 
 
 class Review(models.Model):
     title = models.CharField(max_length=128, null=False)
     text = models.TextField(null=False)
+    text_markdown = models.TextField(default='')
     group = models.CharField(max_length=10, null=False)
     rating = models.IntegerField(null=False)
 
@@ -28,6 +30,19 @@ class Review(models.Model):
     def get_likes(self):
         return self.user_likes.count()
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.text_markdown = markdown(self.text)
+        super(Review, self).save()
+
+    def delete(self, using=None, keep_parents=False):
+        tags_to_remove = []
+        for tag in self.tags.all():
+            if tag.reviews.count() == 1:
+                tags_to_remove.append(tag)
+        for tag in tags_to_remove:
+            tag.delete()
+        super(Review, self).delete()
 
 class Comment(models.Model):
     text = models.TextField(null=False)

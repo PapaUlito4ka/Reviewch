@@ -92,6 +92,14 @@ class ReviewAPIViewSet(viewsets.ModelViewSet):
             models.Tag.objects.get_or_create(name=tag_name)
         return super().create(request, *args, **kwargs)
 
+    def update(self, request, *args, **kwargs):
+        ins = self.get_object()
+        tags_names = request.data.get('tags', [])
+        for tag_name in tags_names:
+            models.Tag.objects.get_or_create(name=tag_name)
+        models.UploadImage.objects.filter(review_id=ins.id).delete()
+        return super().update(request, *args, **kwargs)
+
     def get_review_by_id(self, pk: int):
         try:
             return self.queryset.get(pk=pk)
@@ -219,6 +227,15 @@ class TagAPIViewSet(viewsets.ModelViewSet):
     ordering = ['-reviews_count']
     pagination_class = TagPagination
 
+    @action(methods=['get'], detail=False, url_name='names')
+    def names(self, request: Request):
+        data = {
+            'data': []
+        }
+        for tag in self.queryset:
+            data['data'].append(tag.name)
+        return Response(data, status=status.HTTP_200_OK)
+
 
 class UploadImageAPIViewSet(viewsets.ModelViewSet):
     queryset = models.UploadImage.objects.all()
@@ -231,3 +248,4 @@ class UploadImageAPIViewSet(viewsets.ModelViewSet):
         except:
             pass
         return super().create(request, *args, **kwargs)
+

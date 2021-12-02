@@ -27,8 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User(
             email=validated_data['email'],
-            username=validated_data['username'],
-            is_staff=validated_data['is_staff']
+            username=validated_data['username']
         )
         user.set_password(validated_data['password'])
         user.save()
@@ -51,6 +50,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     author_username = serializers.SerializerMethodField(read_only=True)
     average_rating = serializers.FloatField(read_only=True)
     likes = serializers.IntegerField(read_only=True)
+    text_markdown = serializers.CharField(read_only=True)
     tags = serializers.SlugRelatedField(
         many=True, queryset=Tag.objects.all(), slug_field='name', allow_empty=True
     )
@@ -61,7 +61,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ('id', 'title', 'text', 'group', 'images', 'rating', 'author_id',
+        fields = ('id', 'title', 'text', 'text_markdown', 'group', 'images', 'rating', 'author_id',
                   'author_username', 'average_rating', 'likes', 'tags', 'comments', 'created_at')
 
 

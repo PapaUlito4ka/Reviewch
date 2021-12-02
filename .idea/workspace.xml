@@ -2,17 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8cf746a2-15d9-4c79-b695-2c374adfb206" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/api_requests.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/api_requests.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/create_review.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/create_review.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/templates/review.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/review.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/search.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/templates/tags.html" beforeDir="false" afterPath="$PROJECT_DIR$/core/templates/tags.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/javascript/home_requests.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/javascript/search_requests.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/images/book2.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/images/content.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/images/style_1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviewch/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewch/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/javascript/profile_requests.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/javascript/profile_requests.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/javascript/review_requests.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/javascript/review_requests.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/javascript/search_requests.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/javascript/search_requests.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,8 +60,8 @@
       <list>
         <option value="CSS File" />
         <option value="HTML File" />
-        <option value="JavaScript File" />
         <option value="Python Script" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -157,7 +170,12 @@
       <workItem from="1637573362730" duration="33408000" />
       <workItem from="1637756205915" duration="18595000" />
       <workItem from="1637867303041" duration="11472000" />
-      <workItem from="1637932400276" duration="9469000" />
+      <workItem from="1637932400276" duration="9546000" />
+      <workItem from="1638179075920" duration="7072000" />
+      <workItem from="1638218420319" duration="8536000" />
+      <workItem from="1638274752950" duration="6504000" />
+      <workItem from="1638297994964" duration="11868000" />
+      <workItem from="1638389243360" duration="12548000" />
     </task>
     <servers />
   </component>

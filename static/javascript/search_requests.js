@@ -39,6 +39,7 @@ function getReviews(url, userId) {
                 getReview(review, userId);
             }
             if (json.results.length === 0) {
+                $('.reviews').addClass('cloud mt-3');
                 $('.reviews').append(
                     `<p class="text-center">No content</p>`
                 );
@@ -63,9 +64,9 @@ function getReview(review, userId) {
     }
 
     if (review.text.length > 200)
-        $(`.review-${review.id}-text`).html(review.text.slice(0, 200) + '...');
+        $(`.review-${review.id}-text`).html(review.text_markdown.slice(0, 200) + '...');
     else
-        $(`.review-${review.id}-text`).html(review.text);
+        $(`.review-${review.id}-text`).html(review.text_markdown);
     $(`.review-${review.id}-average-rating`).html(review.average_rating);
     $(`.review-${review.id}-likes`).html(review.likes);
     if (userId) {

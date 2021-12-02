@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django_cleanup.apps.CleanupConfig',
     'django_filters',
+    'social_django',
+    'markdownify',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -80,6 +83,46 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'reviewch.wsgi.application'
 
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'core.authentication.create_user',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id,name,email',
+}
+
+# SOCIAL_AUTH_GOOGLE_OAUTH2_IGNORE_DEFAULT_SCOPE = False
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+#     'https://www.googleapis.com/auth/userinfo.email',
+#     'https://www.googleapis.com/auth/userinfo.profile'
+# ]
+
+LOGIN_URL = 'accounts/login/'
+LOGIN_REDIRECT_URL = '/profile/'
+LOGOUT_URL = 'accounts/logout/'
+LOGOUT_REDIRECT_URL = '/'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '196106449390311'
+SOCIAL_AUTH_FACEBOOK_SECRET = '761fbdae41ab4fda1d8ef6a4186f2ca8'
+
+SOCIAL_AUTH_GITHUB_KEY = '9523e8aa5a007b7a77ca'
+SOCIAL_AUTH_GITHUB_SECRET = 'c059066522eddab65359e7d0fb32802bcf757d09'
+
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -147,9 +190,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-LOGIN_REDIRECT_URL = '/profile/'
-
-LOGOUT_REDIRECT_URL = '/'
+DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+DROPBOX_OAUTH2_TOKEN = 'sl.A9YNc_37qfHG--CGHxm6emRdWTiplnaFeaONN89gUAb00VRGYVuDwQjGsUiDf3scKdV_q42ounlvXPxuZi2IWAn18HMxPnYMFfpazOsPTLFIeAg2Xx71q9P9yIEA44ktAdcIKVYffMvB'
+DROPBOX_ROOT_PATH = '/media'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
