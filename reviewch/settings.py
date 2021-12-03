@@ -103,12 +103,6 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email',
 }
 
-# SOCIAL_AUTH_GOOGLE_OAUTH2_IGNORE_DEFAULT_SCOPE = False
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-#     'https://www.googleapis.com/auth/userinfo.email',
-#     'https://www.googleapis.com/auth/userinfo.profile'
-# ]
-
 LOGIN_URL = 'accounts/login/'
 LOGIN_REDIRECT_URL = '/profile/'
 LOGOUT_URL = 'accounts/logout/'
@@ -120,7 +114,7 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '761fbdae41ab4fda1d8ef6a4186f2ca8'
 SOCIAL_AUTH_GITHUB_KEY = '9523e8aa5a007b7a77ca'
 SOCIAL_AUTH_GITHUB_SECRET = 'c059066522eddab65359e7d0fb32802bcf757d09'
 
-SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -186,7 +180,7 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 DROPBOX_OAUTH2_TOKEN = '_HN7qTI4W14AAAAAAAAAASR4mx7vNa4y5UhQ1JSDx7cwJCFfJ3dtRpJrdW5Wf8bR'
