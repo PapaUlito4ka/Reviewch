@@ -6,8 +6,6 @@
 *.py[cod]
 *$py.class
 
-reviewch/settings.py
-
 # C extensions
 *.so
 

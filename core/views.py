@@ -38,8 +38,8 @@ def register(request: HttpRequest):
         'language': request.session.get('language', 'english')
     }
     if request.method == 'GET':
-        if context['user'].is_authenticated:
-            return redirect(reverse('profile', kwargs={'id': context['user'].id}))
+        if request.user.is_authenticated:
+            return redirect(reverse('profile', kwargs={'id': request.user.id}))
         context['form'] = forms.RegisterForm()
         return render(request, 'register.html', context=context)
     if request.method == 'POST':
@@ -115,8 +115,8 @@ def create_review(request: HttpRequest):
                 if len(request.FILES.getlist('images')) != 0:
                     res = api.create_review_images(res.json(), request.FILES)
                     if res.status_code == status.HTTP_201_CREATED:
-                        return redirect(reverse('profile', kwargs={'id': context['user'].id}))
-                return redirect(reverse('profile', kwargs={'id': context['user'].id}))
+                        return redirect(reverse('profile', kwargs={'id': request.user.id}))
+                return redirect(reverse('profile', kwargs={'id': request.user.id}))
             context['error'] = res.json()
             return render(request, 'create_review.html', context=context)
         return render(request, 'create_review.html', context=context)
@@ -152,8 +152,8 @@ def edit_review(request: HttpRequest, id: int):
                 if len(request.FILES.getlist('images')) != 0:
                     res = api.create_review_images(res.json(), request.FILES)
                     if res.status_code == status.HTTP_201_CREATED:
-                        return redirect(reverse('profile', kwargs={'id': context['user'].id}))
-                return redirect(reverse('profile', kwargs={'id': context['user'].id}))
+                        return redirect(reverse('profile', kwargs={'id': request.user.id}))
+                return redirect(reverse('profile', kwargs={'id': request.user.id}))
             context['error'] = res.json()
             return render(request, 'edit_review.html', context=context)
         return render(request, 'edit_review.html', context=context)
