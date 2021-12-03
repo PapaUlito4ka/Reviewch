@@ -1,8 +1,6 @@
 import core.api_requests as api
 from uuid import uuid4
 import rest_framework.status as status
-from social_core.pipeline.social_auth import social_details
-from social_core.pipeline.user import create_user
 from core.models import User
 
 USER_FIELDS = ['username', 'email']

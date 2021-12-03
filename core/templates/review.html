@@ -9,8 +9,8 @@
     <script type="text/javascript" src="{% static 'javascript/review_requests.js' %}"></script>
     <script>
     $(function () {
-        {% if user.is_authenticated %}
-            render({{ review_id }}, {{ user.id }});
+        {% if request.user.is_authenticated %}
+            render({{ review_id }}, {{ request.user.id }});
         {% else %}
             render({{ review_id }}, null);
         {% endif %}
@@ -114,7 +114,7 @@ h4 {
 
             <div class="d-flex flex-row">
                 <div class="d-flex flex-row align-items-center">
-                    {% if user.is_authenticated %}
+                    {% if request.user.is_authenticated %}
                         <fieldset class="rating me-2">
                             <input type="radio" id="star5" name="rating" value="5" />
                             <label class="full h3" for="star5"><i class="bi bi-star p-0"></i></label>
@@ -131,7 +131,7 @@ h4 {
                         <span class="h3 m-0 me-2"><i class="bi bi-star p-0"></i></span>
                     {% endif %}
                     <span class="p-0 me-4 review-average-rating">Loading...</span>
-                    {% if user.is_authenticated %}
+                    {% if request.user.is_authenticated %}
                         <a href="#" class="h3 m-0 me-2 like-button"><i class="bi bi-heart p-0 review-like-icon"></i></a>
                     {% else %}
                         <span class="h3 m-0 me-2"><i class="bi bi-heart p-0"></i></span>
@@ -145,7 +145,7 @@ h4 {
     <div class="cloud mt-3 mb-3">
         <div class="row px-4 py-3">
             <div class="d-flex flex-row border-bottom">
-                <p class="fs-4">Comments</p>
+                <p class="fs-4">{% if language == 'english' %}Comments{% else %}Комментарии{% endif %}</p>
             </div>
         </div>
         <div class="row px-4 border-bottom review-comments">
@@ -153,9 +153,9 @@ h4 {
         </div>
     </div>
 
-    {% if user.is_authenticated %}
+    {% if request.user.is_authenticated %}
     <div class="cloud p-3 mb-3">
-        <h2>Leave comment</h2>
+        <h2>{% if language == 'english' %}Leave comment{% else %}Оставить комментарий{% endif %}</h2>
         <form class="leave-comment-form" method="post" action="{% url 'review' review_id %}">
             {% csrf_token %}
             <div class="mb-3">
@@ -163,7 +163,7 @@ h4 {
             </div>
             <input type="hidden" name="author_id" class="author-id">
             <input type="hidden" name="review_id" class="review-id" value="{{ review_id }}">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">{% if language == 'english' %}Submit{% else %}Отправить{% endif %}</button>
         </form>
     </div>
     {% endif %}

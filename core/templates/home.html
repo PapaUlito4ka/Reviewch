@@ -7,8 +7,8 @@
 <script type="text/javascript" src="{% static 'javascript/search_requests.js' %}"></script>
 <script>
     $(function () {
-        {% if user.is_authenticated %}
-            render({{ user.id }}, '{{ search }}', '{{ ordering }}', '{{ group }}', {{ page }});
+        {% if request.user.is_authenticated %}
+            render({{ request.user.id }}, '{{ search }}', '{{ ordering }}', '{{ group }}', {{ page }});
         {% else %}
             render(null, '{{ search }}', '{{ ordering }}', '{{ group }}', {{ page }});
         {% endif %}
@@ -20,20 +20,20 @@
 
     <div class="flex-fill cloud mt-3">
         <div class="d-flex flex-row justify-content-around">
-            <button class="btn p-0 border-0 latest-order {% if ordering == '-created_at' %}btn-info{% endif %}"><h2 class="text-center p-3 m-0">Latest articles</h2></button>
-            <button class="btn p-0 border-0 rating-order {% if ordering == '-average_rating' %}btn-info{% endif %}"><h2 class="text-center p-3 m-0">Most rating</h2></button>
-            <button class="btn p-0 border-0" onclick="window.location.href='/tags/'"><h2 class="text-center p-3 m-0">Tags</h2></button>
-            {% if user.is_staff %}
-                <button class="btn p-0 border-0" onclick="window.location.href='/users/'"><h2 class="text-center p-3 m-0">Users</h2></button>
+            <button class="btn p-0 border-0 latest-order {% if ordering == '-created_at' %}btn-info{% endif %}"><h2 class="text-center p-3 m-0">{% if language == 'english' %}Latest{% else %}Новые{% endif %}</h2></button>
+            <button class="btn p-0 border-0 rating-order {% if ordering == '-average_rating' %}btn-info{% endif %}"><h2 class="text-center p-3 m-0">{% if language == 'english' %}Most rating{% else %}Наибольший рейтинг{% endif %}</h2></button>
+            <button class="btn p-0 border-0" onclick="window.location.href='/tags/'"><h2 class="text-center p-3 m-0">{% if language == 'english' %}Tags{% else %}Тэги{% endif %}</h2></button>
+            {% if request.user.is_staff %}
+                <button class="btn p-0 border-0" onclick="window.location.href='/users/'"><h2 class="text-center p-3 m-0">{% if language == 'english' %}Users{% else %}Пользователи{% endif %}</h2></button>
             {% endif %}
         </div>
         <div class="border-bottom"></div>
         <div class="d-flex flex-row justify-content-around">
-            <button class="btn p-0 border-0 movies-group {% if group == 'Movies' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Movies</h2></button>
-            <button class="btn p-0 border-0 games-group {% if group == 'Games' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Games</h2></button>
-            <button class="btn p-0 border-0 books-group {% if group == 'Books' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Books</h2></button>
-            <button class="btn p-0 border-0 music-group {% if group == 'Music' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Music</h2></button>
-            <button class="btn p-0 border-0 sport-group {% if group == 'Sport' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Sport</h2></button>
+            <button class="btn p-0 border-0 movies-group {% if group == 'Movies' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">{% if language == 'english' %}Movies{% else %}Фильмы{% endif %}</h2></button>
+            <button class="btn p-0 border-0 games-group {% if group == 'Games' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">{% if language == 'english' %}Games{% else %}Игры{% endif %}</h2></button>
+            <button class="btn p-0 border-0 books-group {% if group == 'Books' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">{% if language == 'english' %}Books{% else %}Книги{% endif %}</h2></button>
+            <button class="btn p-0 border-0 music-group {% if group == 'Music' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">{% if language == 'english' %}Music{% else %}Музыка{% endif %}</h2></button>
+            <button class="btn p-0 border-0 art-group {% if group == 'Art' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">{% if language == 'english' %}Art{% else %}Живопись{% endif %}</h2></button>
         </div>
     </div>
 
@@ -42,9 +42,9 @@
     <div class="mt-3 d-flex justify-content-center">
         <nav aria-label="cloud mt-3">
             <ul class="pagination">
-                <li class="page-item"><a class="page-link prev-page" href="">Previous</a></li>
+                <li class="page-item"><a class="page-link prev-page" href="">{% if language == 'english' %}Previous{% else %}Предыдущая{% endif %}</a></li>
                 <li class="page-item disabled"><a class="page-link cur-page" href="">...</a></li>
-                <li class="page-item"><a class="page-link next-page" href="">Next</a></li>
+                <li class="page-item"><a class="page-link next-page" href="">{% if language == 'english' %}Next{% else %}Следующая{% endif %}</a></li>
             </ul>
         </nav>
     </div>

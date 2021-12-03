@@ -4,12 +4,9 @@ from rest_framework import serializers
 from core.models import Review, Comment, Tag, User, UploadImage
 
 
-class UserSerializer(serializers.ModelSerializer):
-
-    def get_image(self, obj):
-        return obj.image.image.url
-
-    image = serializers.SerializerMethodField(read_only=True)
+class ListUserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    email = serializers.EmailField(required=True)
     reviews = serializers.PrimaryKeyRelatedField(
         many=True, read_only=True
     )
@@ -17,12 +14,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'email', 'image',
+        fields = ('id', 'username', 'password', 'email',
                   'is_staff', 'reviews', 'date_joined')
-        extra_kwargs = {
-            'password': {'write_only': True},
-            'email': {'required': True}
-        }
 
     def create(self, validated_data):
         user = User(
@@ -37,7 +30,62 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class ReviewSerializer(serializers.ModelSerializer):
+class DetailUserSerializer(serializers.ModelSerializer):
+
+    def get_image(self, obj):
+        return obj.image.image.url
+
+    image = serializers.SerializerMethodField(read_only=True)
+    password = serializers.CharField(write_only=True)
+    email = serializers.EmailField(required=True)
+    reviews = serializers.PrimaryKeyRelatedField(
+        many=True, read_only=True
+    )
+    date_joined = serializers.DateTimeField(format="%d.%m.%Y %H:%M", required=False)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'password', 'email', 'image',
+                  'is_staff', 'reviews', 'date_joined')
+
+    def create(self, validated_data):
+        user = User(
+            email=validated_data['email'],
+            username=validated_data['username']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        UploadImage.objects.create(
+            user=user
+        )
+        return user
+
+
+class ListReviewSerializer(serializers.ModelSerializer):
+
+    def get_author_username(self, obj):
+        return obj.author.username
+
+    author_id = serializers.IntegerField(required=True)
+    author_username = serializers.SerializerMethodField(read_only=True)
+    average_rating = serializers.FloatField(read_only=True)
+    likes = serializers.IntegerField(read_only=True)
+    text_markdown = serializers.CharField(read_only=True)
+    tags = serializers.SlugRelatedField(
+        many=True, queryset=Tag.objects.all(), slug_field='name', allow_empty=True
+    )
+    comments = serializers.PrimaryKeyRelatedField(
+        many=True, read_only=True
+    )
+    created_at = serializers.DateTimeField(format="%d.%m.%Y %H:%M", required=False)
+
+    class Meta:
+        model = Review
+        fields = ('id', 'title', 'text', 'text_markdown', 'group', 'rating', 'author_id',
+                  'author_username', 'average_rating', 'likes', 'tags', 'comments', 'created_at')
+
+
+class DetailReviewSerializer(serializers.ModelSerializer):
 
     def get_author_username(self, obj):
         return obj.author.username
@@ -63,6 +111,9 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = ('id', 'title', 'text', 'text_markdown', 'group', 'images', 'rating', 'author_id',
                   'author_username', 'average_rating', 'likes', 'tags', 'comments', 'created_at')
+
+
+
 
 
 class CommentSerializer(serializers.ModelSerializer):

@@ -60,6 +60,7 @@ function getUser(url) {
         method: 'get',
         success: function (json) {
             $('.user-username').html(json.username);
+            $('.profile-image').prop('src', json.image);
         }
     });
 }

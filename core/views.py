@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 import rest_framework.status as status
@@ -13,21 +13,21 @@ import core.api_requests as api
 
 def home(request: HttpRequest):
     context = {
-        'user': request.user,
         'ordering': request.GET.get('ordering', 'created_at'),
         'group': request.GET.get('group', ''),
-        'page': request.GET.get('page', 1)
+        'page': request.GET.get('page', 1),
+        'language': request.session.get('language', 'english')
     }
     return render(request, 'home.html', context=context)
 
 
 def search(request: HttpRequest):
     context = {
-        'user': request.user,
         'ordering': request.GET.get('ordering', 'created_at'),
         'group': request.GET.get('group', ''),
         'search': request.GET.get('q', ''),
-        'page': request.GET.get('page', 1)
+        'page': request.GET.get('page', 1),
+        'language': request.session.get('language', 'english')
     }
     return render(request, 'search.html', context=context)
 
@@ -35,7 +35,7 @@ def search(request: HttpRequest):
 @csrf_exempt
 def register(request: HttpRequest):
     context = {
-        'user': request.user,
+        'language': request.session.get('language', 'english')
     }
     if request.method == 'GET':
         if context['user'].is_authenticated:
@@ -64,21 +64,21 @@ def profile(request: HttpRequest, id: int = None):
     if not id:
         return redirect(reverse('profile', kwargs={'id': request.user.id}))
     context = {
-        'user': request.user,
         'user_id': id,
         'ordering': request.GET.get('ordering', 'created_at'),
         'group': request.GET.get('group', ''),
         'search': request.GET.get('q', ''),
-        'page': request.GET.get('page', 1)
+        'page': request.GET.get('page', 1),
+        'language': request.session.get('language', 'english')
     }
     return render(request, 'profile.html', context=context)
 
 
 def review(request: HttpRequest, id: int):
     context = {
-        'user': request.user,
         'review_id': id,
-        'form': forms.CommentForm()
+        'form': forms.CommentForm(),
+        'language': request.session.get('language', 'english')
     }
     if request.method == 'GET':
         context['form'] = forms.CommentForm()
@@ -101,7 +101,7 @@ def review(request: HttpRequest, id: int):
 @login_required(login_url='/accounts/login')
 def create_review(request: HttpRequest):
     context = {
-        'user': request.user
+        'language': request.session.get('language', 'english')
     }
     if request.method == 'GET':
         context['form'] = forms.CreateReviewForm()
@@ -125,8 +125,8 @@ def create_review(request: HttpRequest):
 @login_required(login_url='/account/login')
 def edit_review(request: HttpRequest, id: int):
     context = {
-        'user': request.user,
-        'review_id': id
+        'review_id': id,
+        'language': request.session.get('language', 'english')
     }
     if request.method == 'GET':
         res = api.get_review(id)
@@ -161,7 +161,7 @@ def edit_review(request: HttpRequest, id: int):
 
 def tags(request: HttpRequest):
     context = {
-        'user': request.user
+        'language': request.session.get('language', 'english')
     }
     return render(request, 'tags.html', context=context)
 
@@ -178,9 +178,19 @@ def tags(request: HttpRequest):
 )
 def users(request: HttpRequest):
     context = {
-        'user': request.user
+        'language': request.session.get('language', 'english')
     }
     return render(request, 'users.html', context=context)
+
+
+def set_english_language(request: HttpRequest):
+    request.session['language'] = 'english'
+    return redirect(request.GET.get('next', '/'))
+
+
+def set_russian_language(request: HttpRequest):
+    request.session['language'] = 'russian'
+    return redirect(request.GET.get('next', '/'))
 
 
 

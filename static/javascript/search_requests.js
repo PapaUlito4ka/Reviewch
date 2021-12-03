@@ -25,7 +25,7 @@ function getReviews(url, userId) {
                                 <p class="m-0">Loading...</p>
                             </div>
                             <div class="d-flex flex-row justify-content-between">
-                                <a href="/review/${review.id}/"><div class="blue-cloud p-2 px-4">Read</div></a>
+                                <a href="/review/${review.id}/"><div class="blue-cloud"><i class="bi bi-arrow-right-short h2"></i></div></a>
                                 <div class="d-flex flex-row align-items-center">
                                     <span class="h3 m-0 me-2"><i class="bi bi-star p-0 review-${review.id}-star"></i></span>
                                     <span class="p-0 me-4 review-${review.id}-average-rating">Loading...</span>
@@ -186,7 +186,7 @@ function render(userId, search, ordering, group, page) {
     $('.music-group').click(function () {
         setUrlParameter('group', 'Music')
     });
-    $('.sport-group').click(function () {
-        setUrlParameter('group', 'Sport')
+    $('.art-group').click(function () {
+        setUrlParameter('group', 'Art')
     });
 }

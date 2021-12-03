@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ user.username }}{% endblock %}
+{% block title %}{{ request.user.username }}{% endblock %}
 
 {% block scripts %}
     <script type="text/javascript" src="{% static 'javascript/profile_requests.js' %}"></script>
     <script>
     $(function () {
-        render({{ user.id }}, {{ user_id }}, {{ user.is_staff|yesno:"true,false" }}, '{{ search }}', '{{ ordering }}', '{{ group }}', '{{ page }}');
+        render({{ request.user.id }}, {{ user_id }}, {{ request.user.is_staff|yesno:"true,false" }}, '{{ search }}', '{{ ordering }}', '{{ group }}', '{{ page }}');
     })
     </script>
 {% endblock %}
@@ -18,21 +18,21 @@
         <div class="col-3 flex-fill d-flex flex-column justify-content-start me-3">
             <div class="cloud p-2">
             <p class="fs-5 text-center user-username">Loading...</p>
-            <img src="{{ user.image.image.url }}" class="img-fluid img-rounded">
+            <img src="#" class="img-fluid img-rounded profile-image">
             <div class="d-flex justify-content-between">
-                <p>Publications</p>
+                <p>{% if language == 'english' %}Publications{% else %}Публикации{% endif %}</p>
                 <span class="publication-count">Loading...</span>
             </div>
             <div class="d-flex justify-content-between">
-                <p>Average rating</p>
+                <p>{% if language == 'english' %}Average rating{% else %}Средний рейтинг{% endif %}</p>
                 <span class="average-rating">Loading...</span>
             </div>
             <div class="d-flex justify-content-between">
-                <p>Likes</p>
+                <p>{% if language == 'english' %}Likes{% else %}Лайки{% endif %}</p>
                 <span class="total-likes">Loading...</span>
             </div>
             <div class="d-flex justify-content-between">
-                <p>Comments</p>
+                <p>{% if language == 'english' %}Comments{% else %}Комментарии{% endif %}</p>
                 <span class="comments-count">Loading...</span>
             </div>
             </div>
@@ -41,27 +41,27 @@
         <div class="col-9 flex-fill d-flex flex-column">
 
             <div class="flex-shrink-1 d-flex justify-content-between align-items-center cloud mb-3 p-2">
-                <p class="m-0 fs-4">Publications</p>
+                <p class="m-0 fs-4">{% if language == 'english' %}Publications{% else %}Публикации{% endif %}</p>
                 <a href="{% url 'create_review' %}" class="h1 m-0"><i class="bi bi-plus"></i></a>
             </div>
 
             <div class="flex-fill cloud mb-3">
                 <div class="d-flex flex-row justify-content-around">
-                    <button class="btn p-0 border-0 latest-order {% if ordering == '-created_at' %}btn-info{% endif %}"><h2 class="text-center p-3 m-0">Latest</h2></button>
-                    <button class="btn p-0 border-0 rating-order {% if ordering == '-average_rating' %}btn-info{% endif %}"><h2 class="text-center p-3 m-0">Most rating</h2></button>
+                    <button class="btn p-0 border-0 latest-order {% if ordering == '-created_at' %}btn-info{% endif %}"><h2 class="text-center p-3 m-0">{% if language == 'english' %}Latest{% else %}Новые{% endif %}</h2></button>
+                    <button class="btn p-0 border-0 rating-order {% if ordering == '-average_rating' %}btn-info{% endif %}"><h2 class="text-center p-3 m-0">{% if language == 'english' %}Most rating{% else %}Наибольший рейтинг{% endif %}</h2></button>
                 </div>
                 <div class="border-bottom"></div>
                 <div class="d-flex flex-row justify-content-around">
-                    <button class="btn p-0 border-0 movies-group {% if group == 'Movies' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Movies</h2></button>
-                    <button class="btn p-0 border-0 games-group {% if group == 'Games' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Games</h2></button>
-                    <button class="btn p-0 border-0 books-group {% if group == 'Books' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Books</h2></button>
-                    <button class="btn p-0 border-0 music-group {% if group == 'Music' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Music</h2></button>
-                    <button class="btn p-0 border-0 art-group {% if group == 'Art' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">Art</h2></button>
+                    <button class="btn p-0 border-0 movies-group {% if group == 'Movies' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">{% if language == 'english' %}Movies{% else %}Фильмы{% endif %}</h2></button>
+                    <button class="btn p-0 border-0 games-group {% if group == 'Games' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">{% if language == 'english' %}Games{% else %}Игры{% endif %}</h2></button>
+                    <button class="btn p-0 border-0 books-group {% if group == 'Books' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">{% if language == 'english' %}Books{% else %}Книги{% endif %}</h2></button>
+                    <button class="btn p-0 border-0 music-group {% if group == 'Music' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">{% if language == 'english' %}Music{% else %}Музыка{% endif %}</h2></button>
+                    <button class="btn p-0 border-0 art-group {% if group == 'Art' %}btn-warning{% endif %}"><h2 class="text-center p-2 m-0">{% if language == 'english' %}Art{% else %}Живопись{% endif %}</h2></button>
                 </div>
             </div>
 
             <div class="flex-shrink-1 cloud mb-3">
-                <input id="profile-search" type="search" class="form-control" placeholder="Search for publication...">
+                <input id="profile-search" type="search" class="form-control" placeholder="{% if language == 'english' %}Search for publication...{% else %}Искать публикации...{% endif %}">
             </div>
 
             <div class="flex-grow-1 cloud reviews-cloud">
@@ -69,9 +69,9 @@
                     <thead>
                         <tr>
                             <th scope="col"></th>
-                            <th scope="col" class="text-center">Group</th>
-                            <th scope="col" class="text-center">Title</th>
-                            <th scope="col" class="text-center">Actions</th>
+                            <th scope="col" class="text-center">{% if language == 'english' %}Group{% else %}Группа{% endif %}</th>
+                            <th scope="col" class="text-center">{% if language == 'english' %}Title{% else %}Заголовок{% endif %}</th>
+                            <th scope="col" class="text-center">{% if language == 'english' %}Actions{% else %}Действия{% endif %}</th>
                         </tr>
                     </thead>
                     <tbody>

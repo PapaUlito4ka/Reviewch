@@ -9,7 +9,7 @@ function getUsers(url) {
                     `<div class="mb-3">
                         <div class="cloud d-flex flex-column p-2">
                             <div class="d-flex">
-                                <img src="${user.image}" class="rounded me-2" width="50" height="50">
+                                <img src="#" class="rounded me-2 user-${user.id}-profile-image" width="50" height="50">
                                 <div class="flex-fill align-self-end">
                                     <div class="d-flex align-items-center">
                                         <span class="me-2"><a href="/profile/${user.id}">${user.username}</a></span>
@@ -27,13 +27,23 @@ function getUsers(url) {
                 );
                 getUserAverageRating(`/api/users/${user.id}/average_rating/`, user.id);
                 getUserTotalLikes(`/api/users/${user.id}/total_likes/`, user.id);
+                getUserProfileImage(`/api/users/${user.id}/`, user.id);
             }
             if (json.results.length === 0) {
-                // $('.users').addClass('cloud mt-3');
                 $('.users').append(
                     `<p class="text-center">No content</p>`
                 );
             }
+        }
+    });
+}
+
+function getUserProfileImage(url, userId) {
+    $.ajax({
+        url: url,
+        method: 'get',
+        success: function (json) {
+            $(`.user-${userId}-profile-image`).prop('src', json.image);
         }
     });
 }

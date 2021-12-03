@@ -25,35 +25,35 @@
         <form method="post" action="{% url 'create_review' %}" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <div class="mb-3" {% if user.is_staff %}{% else %}hidden{% endif %}>
-                <label for="id_title" class="form-label">{{ form.user.label }}</label>
+            <div class="mb-3" {% if request.user.is_staff %}{% else %}hidden{% endif %}>
+                <label for="id_title" class="form-label">{% if language == 'english' %}User{% else %}Пользователь{% endif %}</label>
                 {{ form.user|add_class:"form-control" }}
             </div>
             <div class="mb-3">
-                <label for="id_title" class="form-label">{{ form.title.label }}</label>
+                <label for="id_title" class="form-label">{% if language == 'english' %}Title{% else %}Заголовок{% endif %}</label>
                 {{ form.title|add_class:"form-control" }}
             </div>
             <div class="mb-3">
-                <label for="id_group" class="form-label">{{ form.group.label }}</label>
+                <label for="id_group" class="form-label">{% if language == 'english' %}Group{% else %}Группа{% endif %}</label>
                 {{ form.group|add_class:"form-control" }}
             </div>
             <div class="mb-3">
-                <label for="id_text" class="form-label">{{ form.text.label }}</label>
+                <label for="id_text" class="form-label">{% if language == 'english' %}Text{% else %}Текст{% endif %}</label>
                 {{ form.text|add_class:"form-control" }}
             </div>
             <div class="mb-3">
-                <label for="id_rating" class="form-label">{{ form.rating.label }}</label>
+                <label for="id_rating" class="form-label">{% if language == 'english' %}Rating{% else %}Рейтинг{% endif %}</label>
                 {{ form.rating|add_class:"form-control" }}
             </div>
             <div class="mb-3">
-                <label for="id_tags" class="form-label">{{ form.tags.label }}</label>
+                <label for="id_tags" class="form-label">{% if language == 'english' %}Tags{% else %}Тэги{% endif %}</label>
                 {{ form.tags|add_class:"form-control" }}
             </div>
             <div class="mb-3">
-                <label for="id_images" class="form-label">{{ form.images.label }}</label>
+                <label for="id_images" class="form-label">{% if language == 'english' %}Images{% else %}Изображения{% endif %}</label>
                 {{ form.images|add_class:"form-control" }}
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">{% if language == 'english' %}Submit{% else %}Отправить{% endif %}</button>
         </form>
     </div>
 

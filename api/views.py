@@ -6,7 +6,7 @@ from django.db.models import Avg, Count
 from django.db.models import Prefetch
 import rest_framework.status as status
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.decorators import api_view, action
+from rest_framework.decorators import action
 from rest_framework import filters
 
 import api.serializers as serializers
@@ -15,13 +15,21 @@ from api.pagination import UserPagination, ReviewPagination, TagPagination
 
 
 class UserAPIViewSet(viewsets.ModelViewSet):
-    queryset = models.User.objects.all()
-    serializer_class = serializers.UserSerializer
+    p1 = Prefetch('image')
+    queryset = models.User.objects.prefetch_related(p1).all()
+    serializer_classes = {
+        'list': serializers.ListUserSerializer,
+        'retrieve': serializers.DetailUserSerializer
+    }
+    default_serializer_class = serializers.DetailUserSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['username', 'is_staff']
     ordering_fields = ['username']
     ordering = ['username']
     pagination_class = UserPagination
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
 
     def get_user_by_id(self, pk: int):
         try:
@@ -39,20 +47,15 @@ class UserAPIViewSet(viewsets.ModelViewSet):
     @action(methods=['get'], detail=True, url_name='average_rating')
     def average_rating(self, request: Request, pk: int = None):
         user = self.get_user_by_id(pk)
-        data: str
-        if user.reviews.count() == 0:
-            data = 'None'
-        else:
-            if not all(review.get_average_rating() for review in user.reviews.all()):
-                data = 'None'
-            else:
-                data = sum(
-                    review.get_average_rating()
-                    for review in user.reviews.all()
-                    if review.get_average_rating()) / user.reviews.count()
-        return Response({
-            'data': data
-        }, status=status.HTTP_200_OK)
+        data = None
+
+        if all(review.get_average_rating() for review in user.reviews.all()) and \
+                user.reviews.count() != 0:
+            data = sum(
+                review.get_average_rating()
+                for review in user.reviews.all()
+                if review.get_average_rating()) / user.reviews.count()
+        return Response({'data': data}, status=status.HTTP_200_OK)
 
     @action(methods=['get'], detail=True, url_name='total_likes')
     def total_likes(self, request: Request, pk: int = None):
@@ -75,16 +78,24 @@ class ReviewAPIViewSet(viewsets.ModelViewSet):
     p3 = Prefetch('user_likes')
     p4 = Prefetch('comments')
     p5 = Prefetch('tags')
-    queryset = models.Review.objects.prefetch_related(p1, p2, p3, p4, p5) \
+    p6 = Prefetch('images')
+    queryset = models.Review.objects.prefetch_related(p1, p2, p3, p4, p5, p6) \
         .annotate(average_rating=Avg('userreviewrating__rating')) \
         .annotate(likes=Count('user_likes'))
-    serializer_class = serializers.ReviewSerializer
+    serializer_classes = {
+        'list': serializers.ListReviewSerializer,
+        'retrieve': serializers.DetailReviewSerializer
+    }
+    default_serializer_class = serializers.DetailReviewSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     filterset_fields = ['group', 'tags__name', 'author__username', 'author__id']
     search_fields = ['title', 'text', 'comments__text']
     ordering_fields = ['created_at', 'average_rating', 'likes']
     ordering = ['-created_at']
     pagination_class = ReviewPagination
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
 
     def create(self, request, *args, **kwargs):
         tags_names = request.data.get('tags', [])
@@ -229,12 +240,9 @@ class TagAPIViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False, url_name='names')
     def names(self, request: Request):
-        data = {
-            'data': []
-        }
-        for tag in self.queryset:
-            data['data'].append(tag.name)
-        return Response(data, status=status.HTTP_200_OK)
+        return Response({
+            'data': [tag.name for tag in self.queryset]
+        }, status=status.HTTP_200_OK)
 
 
 class UploadImageAPIViewSet(viewsets.ModelViewSet):
@@ -248,4 +256,3 @@ class UploadImageAPIViewSet(viewsets.ModelViewSet):
         except:
             pass
         return super().create(request, *args, **kwargs)
-

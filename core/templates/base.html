@@ -6,14 +6,14 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
 
-    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'icons-1.4.1/font/bootstrap-icons.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
     {% block styles %}{% endblock %}
 
-    <script type="text/javascript" src="{% static 'jquery/jquery-3.5.1.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     {% block scripts %}{% endblock %}
 
@@ -22,30 +22,28 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="row flex-fill">
-            <div class="col-2"></div>
-            <div class="col-8 flex-fill">
+            <div class="col-2 p-0"></div>
+            <div class="col-8 flex-fill p-0">
                 <div class="d-flex flex-fill align-items-center">
                     <a class="navbar-brand" href="{% url 'home' %}"><h2 class="mb-0">Reviewch</h2></a>
                     <img src="{% get_media_prefix %}reviewch_icon.png" width="32" height="32">
                     <div class="container-fluid">
                         <form class="d-flex" method="get" action="/search">
-                            <input class="form-control me-2" name="q" type="search" placeholder="Search for review..." aria-label="Search">
+                            <input class="form-control me-2" name="q" type="search" placeholder="{% if language == 'english' %}Search for review...{% else %}Искать обзор...{% endif %}" aria-label="Search">
                         </form>
                     </div>
                     <div class="d-flex justify-content-end" id="navbarNav">
-
                         <div class="dropdown">
                             <a class="" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person h1"></i>
                             </a>
-
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                {% if user.is_authenticated %}
-                                    <li><a class="dropdown-item" href="{% url 'profile' user.id %}">Profile</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                {% if request.user.is_authenticated %}
+                                    <li><a class="dropdown-item" href="{% url 'profile' user.id %}">{% if language == 'english' %}Profile{% else %}Профиль{% endif %}</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'logout' %}">{% if language == 'english' %}Logout{% else %}Выйти{% endif %}</a></li>
                                 {% else %}
-                                    <li><a class="dropdown-item" href="{% url 'login' %}">Sign in</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'register' %}">Sign up</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'login' %}">{% if language == 'english' %}Sign in{% else %}Войти{% endif %}</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'register' %}">{% if language == 'english' %}Sign up{% else %}Регистрация{% endif %}</a></li>
                                 {% endif %}
                             </ul>
                         </div>
@@ -53,18 +51,27 @@
                     </div>
                 </div>
             </div>
-            <div class="col-2"></div>
+            <div class="col-2 p-0 d-flex justify-content-center">
+                <div class="dropdown">
+                    <a class="" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-translate h1"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" href="/other/set_english_language/?next={{ request.path }}">{% if language == 'english' %}English{% else %}Английский{% endif %}</a></li>
+                        <li><a class="dropdown-item" href="/other/set_russian_language/?next={{ request.path }}">{% if language == 'english' %}Russian{% else %}Русский{% endif %}</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </nav>
 
     <div class="row">
-        <div class="col-2"></div>
-        <div class="col-8">
+        <div class="col-2 p-0"></div>
+        <div class="col-8 p-0">
             {% block content %}{% endblock %}
         </div>
-        <div class="col-2"></div>
+        <div class="col-2 p-0"></div>
     </div>
-
 
 </body>
 </html>

@@ -44,6 +44,7 @@ class Review(models.Model):
             tag.delete()
         super(Review, self).delete()
 
+
 class Comment(models.Model):
     text = models.TextField(null=False)
 
