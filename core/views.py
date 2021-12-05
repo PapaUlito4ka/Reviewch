@@ -124,6 +124,8 @@ def create_review(request: HttpRequest):
 
 @login_required(login_url='/account/login')
 def edit_review(request: HttpRequest, id: int):
+    if len(request.user.reviews.filter(id=id)) == 0:
+        return redirect(reverse('profile'))
     context = {
         'review_id': id,
         'language': request.session.get('language', 'english')
