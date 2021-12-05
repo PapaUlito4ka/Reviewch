@@ -7,7 +7,7 @@
 
     <div class="cloud mt-3">
         <h1 class="text-center">404</h1>
-        <h3 class="text-center">The page you were looking for wasn't found</h3>
+        <h3 class="text-center">{% if language == 'english' %}The page you were looking for wasn't found{% else %}Страница не существует{% endif %}</h3>
     </div>
 
 {% endblock %}

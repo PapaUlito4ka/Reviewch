@@ -20,18 +20,18 @@
                 {% csrf_token %}
 
                 <div class="mb-3">
-                    <label for="id_email" class="form-label">{{ form.email.label }}</label>
+                    <label for="id_email" class="form-label">{% if language == 'english' %}Email{% else %}Почта{% endif %}</label>
                     {{ form.email|add_class:"form-control" }}
                 </div>
                 <div class="mb-3">
-                    <label for="id_username" class="form-label">{{ form.username.label }}</label>
+                    <label for="id_username" class="form-label">{% if language == 'english' %}Username{% else %}Никнейм{% endif %}</label>
                     {{ form.username|add_class:"form-control" }}
                 </div>
                 <div class="mb-3">
-                    <label for="id_password" class="form-label">{{ form.password.label }}</label>
+                    <label for="id_password" class="form-label">{% if language == 'english' %}Password{% else %}Пароль{% endif %}</label>
                     {{ form.password|add_class:"form-control" }}
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">{% if language == 'english' %}Submit{% else %}Отправить{% endif %}</button>
 
             </form>
         </div>

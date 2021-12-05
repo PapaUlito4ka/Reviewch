@@ -9,8 +9,8 @@ function getReviews(url, userId) {
                     `<div class="cloud mt-3">
                         <div class="row px-4 py-3">
                             <div class="d-flex flex-row align-items-center mb-2">
-                                <a href="#" class="d-flex review-${review.id}-author-image">Loading...</a>
-                                <a href="#" class="m-0 mx-2 review-${review.id}-author">Loading...</a>
+                                <a href="/profile/${review.author_id}" class="d-flex review-${review.id}-author-image">Loading...</a>
+                                <a href="/profile/${review.author_id}" class="m-0 mx-2 review-${review.id}-author">Loading...</a>
                                 <p class="m-0 mx-2 text-secondary review-${review.id}-created-at">Loading...</p>
                             </div>
                             <div class="d-flex flex-row mb-2">
