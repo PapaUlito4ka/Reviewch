@@ -51,10 +51,10 @@ class UserAPIViewSet(viewsets.ModelViewSet):
 
         if all(review.get_average_rating() for review in user.reviews.all()) and \
                 user.reviews.count() != 0:
-            data = sum(
+            data = round(sum(
                 review.get_average_rating()
                 for review in user.reviews.all()
-                if review.get_average_rating()) / user.reviews.count()
+                if review.get_average_rating()) / user.reviews.count(), 2)
         return Response({'data': data}, status=status.HTTP_200_OK)
 
     @action(methods=['get'], detail=True, url_name='total_likes')
