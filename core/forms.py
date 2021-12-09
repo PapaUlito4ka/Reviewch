@@ -21,9 +21,7 @@ class RegisterForm(forms.Form):
 
 
 class CreateReviewForm(forms.Form):
-    user = forms.CharField(
-        widget=forms.Select(choices=[(user.username, user.username) for user in User.objects.all()])
-    )
+    user = forms.ChoiceField()
     title = forms.CharField()
     group = forms.CharField(
         widget=forms.Select(choices=CreateReviewGroups)

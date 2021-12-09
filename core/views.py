@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 import rest_framework.status as status
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
-from core.models import Review
+from core.models import Review, User
 
 import core.forms as forms
 import core.api_requests as api
@@ -105,6 +105,7 @@ def create_review(request: HttpRequest):
     }
     if request.method == 'GET':
         context['form'] = forms.CreateReviewForm()
+        context['form'].fields['user'].choices = [(user.username, user.username) for user in User.objects.all()]
         context['form'].fields['user'].initial = request.user.username
         return render(request, 'create_review.html', context=context)
     if request.method == 'POST':
@@ -134,16 +135,16 @@ def edit_review(request: HttpRequest, id: int):
         res = api.get_review(id)
         if res.status_code == status.HTTP_200_OK:
             data = res.json()
-            context['form'] = forms.CreateReviewForm(
-                initial={
-                    'user': data['author_username'],
-                    'title': data['title'],
-                    'group': data['group'],
-                    'text': data['text'],
-                    'rating': data['rating'],
-                    'tags': ' '.join(data['tags'])
-                }
-            )
+            context['form'] = forms.CreateReviewForm()
+            context['form'].fields['user'].choices = [(user.username, user.username) for user in User.objects.all()]
+            context['form'].initial = {
+                'user': data['author_username'],
+                'title': data['title'],
+                'group': data['group'],
+                'text': data['text'],
+                'rating': data['rating'],
+                'tags': ' '.join(data['tags'])
+            }
             return render(request, 'edit_review.html', context=context)
         return render(request, 'not_found.html', context=context)
     if request.method == 'POST':
