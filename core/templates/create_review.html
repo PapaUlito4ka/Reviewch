@@ -17,7 +17,7 @@
 
     <div class="cloud mt-3 p-3 mb-3">
         {% if form.errors %}
-            <p>Error during registration. Please try again.</p>
+            {{ form.errors }}
         {% endif %}
         {% if error %}
             <p>{{ error }}</p>

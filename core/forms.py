@@ -20,8 +20,13 @@ class RegisterForm(forms.Form):
     )
 
 
+class ChoiceFieldNoValidation(forms.ChoiceField):
+    def validate(self, value):
+        pass
+
+
 class CreateReviewForm(forms.Form):
-    user = forms.ChoiceField()
+    user = ChoiceFieldNoValidation()
     title = forms.CharField()
     group = forms.CharField(
         widget=forms.Select(choices=CreateReviewGroups)
