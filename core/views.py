@@ -125,7 +125,7 @@ def create_review(request: HttpRequest):
 
 @login_required(login_url='/account/login')
 def edit_review(request: HttpRequest, id: int):
-    if len(request.user.reviews.filter(id=id)) == 0:
+    if len(request.user.reviews.filter(id=id)) and not request.user.is_staff == 0:
         return redirect('/profile')
     context = {
         'review_id': id,
