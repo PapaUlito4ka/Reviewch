@@ -4,14 +4,25 @@
 
 {% block title %}Create Review{% endblock %}
 
+{% block scripts %}
+    <script type="text/javascript" src="{% static 'javascript/edit_review_requests.js' %}"></script>
+    <script>
+    $(function () {
+        render({{ review_id }});
+    })
+    </script>
+{% endblock %}
+
 {% block content %}
 
     <div class="cloud mt-3 p-3 mb-3">
         {% if form.errors %}
             {{ form.errors }}
         {% endif %}
-        {% if error %}
-            <p>{{ error }}</p>
+        {% if errors %}
+            {% for error in errors %}
+                <p class="text-center text-danger">{{ error }}</p><br>
+            {% endfor %}
         {% endif %}
         <form method="post" action="{% url 'edit_review' review_id %}" enctype="multipart/form-data">
             {% csrf_token %}
@@ -43,6 +54,9 @@
             <div class="mb-3">
                 <label for="id_images" class="form-label">{% if language == 'english' %}Images{% else %}Изображения{% endif %}</label>
                 {{ form.images|add_class:"form-control" }}
+            </div>
+            <div class="mb-3 display-images">
+
             </div>
             <button type="submit" class="btn btn-primary">{% if language == 'english' %}Submit{% else %}Отправить{% endif %}</button>
             <button type="reset" class="btn btn-default pull-right" onclick="window.location.href='/profile'">{% if language == 'english' %}Cancel{% else %}Отмена{% endif %}</button>

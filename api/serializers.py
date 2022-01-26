@@ -113,9 +113,6 @@ class DetailReviewSerializer(serializers.ModelSerializer):
                   'author_username', 'average_rating', 'likes', 'tags', 'comments', 'created_at')
 
 
-
-
-
 class CommentSerializer(serializers.ModelSerializer):
 
     def get_author_username(self, obj):

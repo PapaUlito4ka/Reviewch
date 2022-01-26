@@ -73,8 +73,10 @@ h4 {
         {% if form.errors %}
             <p>Error during comment posting. Please try again.</p>
         {% endif %}
-        {% if error %}
-            <p>{{ error }}</p>
+        {% if errors %}
+            {% for error in errors %}
+                <p class="text-center text-danger">{{ error }}</p><br>
+            {% endfor %}
         {% endif %}
         <div class="row px-4 py-3">
             <div class="d-flex flex-row align-items-center mb-2">

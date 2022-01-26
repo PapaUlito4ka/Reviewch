@@ -10,10 +10,12 @@
         <div class="col-4"></div>
         <div class="col-4 cloud d-flex flex-column align-items-center p-3">
             {% if form.errors %}
-                <p>Error during registration. Please try again.</p>
+                <p class="text-center">Error during registration. Please try again.</p>
             {% endif %}
-            {% if error %}
-                <p>{{ error }}</p>
+            {% if errors %}
+                {% for error in errors %}
+                    <p class="text-center text-danger">{{ error }}</p><br>
+                {% endfor %}
             {% endif %}
 
             <form method="post" action="{% url 'register' %}">

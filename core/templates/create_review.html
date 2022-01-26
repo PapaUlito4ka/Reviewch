@@ -19,8 +19,10 @@
         {% if form.errors %}
             {{ form.errors }}
         {% endif %}
-        {% if error %}
-            <p>{{ error }}</p>
+        {% if errors %}
+            {% for error in errors %}
+                <p class="text-center text-danger">{{ error }}</p><br>
+            {% endfor %}
         {% endif %}
         <form method="post" action="{% url 'create_review' %}" enctype="multipart/form-data">
             {% csrf_token %}
