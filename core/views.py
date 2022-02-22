@@ -6,9 +6,11 @@ import rest_framework.status as status
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
 from rest_framework.exceptions import ValidationError
+from markdown import markdown
+import html
+import json
 
 from core.models import Review, User
-
 import core.forms as forms
 import core.api_requests as api
 import core.services as services
@@ -31,7 +33,7 @@ def search(request: HttpRequest):
         'group': request.GET.get('group', ''),
         'search': request.GET.get('q', ''),
         'page': request.GET.get('page', 1),
-        'language': request.session.get('language', 'english')
+        'language': request.COOKIES.get('language', 'english')
     }
     return render(request, 'search.html', context=context)
 
@@ -198,6 +200,14 @@ def set_russian_language(request: HttpRequest):
     res = redirect(request.GET.get('next', '/'))
     res.set_cookie('language', 'russian')
     return res
+
+@csrf_exempt
+def text_to_markdown(request: HttpRequest):
+    Json = json.loads(request.body)
+    text = Json['text']
+    text = html.escape(text)
+    text_markdown = markdown(text)
+    return HttpResponse(text_markdown.encode('utf-8'))
 
 
 

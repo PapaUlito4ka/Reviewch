@@ -8,63 +8,63 @@
 {% block scripts %}
     <script type="text/javascript" src="{% static 'javascript/review_requests.js' %}"></script>
     <script>
-    $(function () {
-        {% if request.user.is_authenticated %}
-            render({{ review_id }}, {{ request.user.id }});
-        {% else %}
-            render({{ review_id }}, null);
-        {% endif %}
-    })
+        $(function () {
+            {% if request.user.is_authenticated %}
+                render({{ review_id }}, {{ request.user.id }});
+            {% else %}
+                render({{ review_id }}, null);
+            {% endif %}
+        })
     </script>
 {% endblock %}
 
 {% block styles %}
-<style>
-.rating {
-    border: none;
-}
+    <style>
+        .rating {
+            border: none;
+        }
 
-.rating>[id^="star"] {
-    display: none
-}
+        .rating > [id^="star"] {
+            display: none
+        }
 
-.rating>label:before {
-    margin: 5px;
-    font-size: 2.25em;
-    display: inline-block;
-}
+        .rating > label:before {
+            margin: 5px;
+            font-size: 2.25em;
+            display: inline-block;
+        }
 
-.rating>.half:before {
-    content: "\f089";
-    position: absolute
-}
+        .rating > .half:before {
+            content: "\f089";
+            position: absolute
+        }
 
-.rating>label {
-    color: #ddd;
-    float: right
-}
+        .rating > label {
+            color: #ddd;
+            float: right
+        }
 
-.rating>[id^="star"]:checked~label,
-.rating:not(:checked)>label:hover,
-.rating:not(:checked)>label:hover~label {
-    color: #FFD700
-}
+        .rating > [id^="star"]:checked ~ label,
+        .rating:not(:checked) > label:hover,
+        .rating:not(:checked) > label:hover ~ label {
+            color: #FFD700
+        }
 
-.rating>[id^="star"]:checked+label:hover,
-.rating>[id^="star"]:checked~label:hover,
-.rating>label:hover~[id^="star"]:checked~label,
-.rating>[id^="star"]:checked~label:hover~label {
-    color: #FFED85
-}
+        .rating > [id^="star"]:checked + label:hover,
+        .rating > [id^="star"]:checked ~ label:hover,
+        .rating > label:hover ~ [id^="star"]:checked ~ label,
+        .rating > [id^="star"]:checked ~ label:hover ~ label {
+            color: #FFED85
+        }
 
-p {
-    font-size: 14px
-}
+        p {
+            font-size: 14px
+        }
 
-h4 {
-    margin-top: 18px
-}
-</style>
+        h4 {
+            margin-top: 18px
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -98,16 +98,18 @@ h4 {
             </div>
 
             <div id="carouselExampleControls" class="carousel slide mb-2 review-carousel" data-bs-ride="carousel">
-              <div class="carousel-inner review-images">
-              </div>
-              <a class="carousel-control-prev" role="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-              </a>
-              <a class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-              </a>
+                <div class="carousel-inner review-images">
+                </div>
+                <a class="carousel-control-prev" role="button" data-bs-target="#carouselExampleControls"
+                   data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </a>
+                <a class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                   data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </a>
             </div>
 
             <div class="d-flex flex-row mb-4 review-rating">
@@ -118,15 +120,15 @@ h4 {
                 <div class="d-flex flex-row align-items-center">
                     {% if request.user.is_authenticated %}
                         <fieldset class="rating me-2">
-                            <input type="radio" id="star5" name="rating" value="5" />
+                            <input type="radio" id="star5" name="rating" value="5"/>
                             <label class="full h3" for="star5"><i class="bi bi-star p-0"></i></label>
-                            <input type="radio" id="star4" name="rating" value="4" />
+                            <input type="radio" id="star4" name="rating" value="4"/>
                             <label class="full h3" for="star4"><i class="bi bi-star p-0"></i></label>
-                            <input type="radio" id="star3" name="rating" value="3" />
+                            <input type="radio" id="star3" name="rating" value="3"/>
                             <label class="full h3" for="star3"><i class="bi bi-star p-0"></i></label>
-                            <input type="radio" id="star2" name="rating" value="2" />
+                            <input type="radio" id="star2" name="rating" value="2"/>
                             <label class="full h3" for="star2"><i class="bi bi-star p-0"></i></label>
-                            <input type="radio" id="star1" name="rating" value="1" />
+                            <input type="radio" id="star1" name="rating" value="1"/>
                             <label class="full h3" for="star1"><i class="bi bi-star p-0"></i></label>
                         </fieldset>
                     {% else %}
@@ -156,18 +158,19 @@ h4 {
     </div>
 
     {% if request.user.is_authenticated %}
-    <div class="cloud p-3 mb-3">
-        <h2>{% if language == 'english' %}Leave comment{% else %}Оставить комментарий{% endif %}</h2>
-        <form class="leave-comment-form" method="post" action="{% url 'review' review_id %}">
-            {% csrf_token %}
-            <div class="mb-3">
-                {{ form.text|add_class:"form-control" }}
-            </div>
-            <input type="hidden" name="author_id" class="author-id">
-            <input type="hidden" name="review_id" class="review-id" value="{{ review_id }}">
-            <button type="submit" class="btn btn-primary">{% if language == 'english' %}Submit{% else %}Отправить{% endif %}</button>
-        </form>
-    </div>
+        <div class="cloud p-3 mb-3">
+            <h2>{% if language == 'english' %}Leave comment{% else %}Оставить комментарий{% endif %}</h2>
+            <form class="leave-comment-form" method="post" action="{% url 'review' review_id %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.text|add_class:"form-control" }}
+                </div>
+                <input type="hidden" name="author_id" class="author-id">
+                <input type="hidden" name="review_id" class="review-id" value="{{ review_id }}">
+                <button type="submit" class="btn btn-primary">{% if language == 'english' %}Submit{% else %}
+                    Отправить{% endif %}</button>
+            </form>
+        </div>
     {% endif %}
 
 {% endblock %}

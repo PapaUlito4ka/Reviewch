@@ -55,6 +55,22 @@
                 <label for="id_images" class="form-label">{% if language == 'english' %}Images{% else %}Изображения{% endif %}</label>
                 {{ form.images|add_class:"form-control" }}
             </div>
+            <div class="mb-3 review-text"></div>
+            <div id="carouselExampleControls" class="carousel slide mb-2 review-carousel" data-bs-ride="carousel">
+                <div class="carousel-inner review-images">
+                </div>
+                <a class="carousel-control-prev" role="button" data-bs-target="#carouselExampleControls"
+                   data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </a>
+                <a class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                   data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </a>
+            </div>
+
             <button type="submit" class="btn btn-primary">{% if language == 'english' %}Submit{% else %}Отправить{% endif %}</button>
         </form>
     </div>

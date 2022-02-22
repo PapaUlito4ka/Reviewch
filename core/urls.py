@@ -21,4 +21,5 @@ urlpatterns = [
     path('social_auth/', include('social_django.urls'), name='social_auth'),
     path('other/set_english_language/', views.set_english_language, name='set_english_language'),
     path('other/set_russian_language/', views.set_russian_language, name='set_russian_language'),
+    path('other/text_to_markdown/', views.text_to_markdown, name='text_to_markdown')
 ]

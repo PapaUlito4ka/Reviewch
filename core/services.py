@@ -1,7 +1,6 @@
 from typing import Type
 
 from django.http import QueryDict
-from django.utils.datastructures import MultiValueDict
 
 from api.serializers import DetailUserSerializer, DetailReviewSerializer, CommentSerializer, \
                             UploadImageSerializer, TagSerializer
@@ -35,7 +34,6 @@ class ReviewService:
         for tag_name in raw_review['tags']:
             TagService.get_or_create(tag_name)
 
-        print(raw_review)
         serializer = DetailReviewSerializer(data=raw_review)
         serializer.is_valid(raise_exception=True)
         return serializer.create(serializer.validated_data)
@@ -52,8 +50,9 @@ class ReviewService:
         ImageService.delete(review_id)
         ImageService.create(review_id, files)
 
-        serializer = DetailReviewSerializer(raw_review)
-        review = Review.objects.get(review_id)
+        serializer = DetailReviewSerializer(data=raw_review)
+        serializer.is_valid(raise_exception=True)
+        review = Review.objects.get(pk=review_id)
         return serializer.update(review, serializer.validated_data)
 
 
