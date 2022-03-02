@@ -1,7 +1,7 @@
-import core.api_requests as api
 from uuid import uuid4
-import rest_framework.status as status
+
 from core.models import User
+from core.services import UserService
 
 USER_FIELDS = ['username', 'email']
 
@@ -26,13 +26,11 @@ def create_user(strategy, details, backend, user=None, *args, **kwargs):
             'email': fields['email'],
             'password': str(uuid4())
         }
-        res = api.create_user(data)
-        user_data = res.json()
-        if res.status_code != status.HTTP_201_CREATED:
-            raise Exception('Authentication failed')
+
+        user = UserService.create(data)
         return {
             'is_new': True,
-            'user': User.objects.get(pk=user_data['id'])
+            'user': User.objects.get(pk=user.id)
         }
     if backend.name == 'github':
 
@@ -44,11 +42,9 @@ def create_user(strategy, details, backend, user=None, *args, **kwargs):
             'email': fields['email'],
             'password': str(uuid4())
         }
-        res = api.create_user(data)
-        user_data = res.json()
-        if res.status_code != status.HTTP_201_CREATED:
-            raise Exception('Authentication failed')
+
+        user = UserService.create(data)
         return {
             'is_new': True,
-            'user': User.objects.get(pk=user_data['id'])
+            'user': User.objects.get(pk=user.id)
         }

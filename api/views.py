@@ -11,7 +11,8 @@ from rest_framework import filters
 
 import api.serializers as serializers
 import core.models as models
-from api.pagination import UserPagination, ReviewPagination, TagPagination
+from api.pagination import UserPagination, ReviewPagination, TagPagination, UploadImagePagination
+from core.services import ImageService
 
 
 class UserAPIViewSet(viewsets.ModelViewSet):
@@ -71,6 +72,16 @@ class UserAPIViewSet(viewsets.ModelViewSet):
             'data': user.comments.count()
         }, status=status.HTTP_200_OK)
 
+    @action(methods=['put'], detail=True, url_name='edit_profile_image')
+    def edit_profile_image(self, request: Request, pk: int = None):
+        user = self.get_user_by_id(pk)
+        ImageService.update(request.FILES, user_id=user.id)
+        image_ins = models.UploadImage.objects.get(user_id=user.id)
+        return Response(
+            serializers.UploadImageSerializer(image_ins).data,
+            status=status.HTTP_200_OK
+        )
+
 
 class ReviewAPIViewSet(viewsets.ModelViewSet):
     p1 = Prefetch('author')
@@ -108,7 +119,7 @@ class ReviewAPIViewSet(viewsets.ModelViewSet):
         tags_names = request.data.get('tags', [])
         for tag_name in tags_names:
             models.Tag.objects.get_or_create(name=tag_name)
-        models.UploadImage.objects.filter(review_id=ins.id).delete()
+        ImageService.delete(review_id=ins.id)
         return super().update(request, *args, **kwargs)
 
     def get_review_by_id(self, pk: int):
@@ -248,6 +259,9 @@ class TagAPIViewSet(viewsets.ModelViewSet):
 class UploadImageAPIViewSet(viewsets.ModelViewSet):
     queryset = models.UploadImage.objects.all()
     serializer_class = serializers.UploadImageSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user_id', 'review_id']
+    pagination_class = UploadImagePagination
 
     def create(self, request, *args, **kwargs):
         try:
@@ -256,3 +270,11 @@ class UploadImageAPIViewSet(viewsets.ModelViewSet):
         except:
             pass
         return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        try:
+            request.data['review_id'] = int(request.data['review_id'].read())
+            request.data['user_id'] = int(request.data['user_id'].read())
+        except:
+            pass
+        return super().update(request, *args, **kwargs)

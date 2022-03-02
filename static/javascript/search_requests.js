@@ -81,7 +81,7 @@ function getAuthorImage(url, selector) {
         method: 'get',
         success: function (json) {
             $(selector).html(
-                `<img src="${json.image}" width="20" height="20" alt="img">`
+                `<img class="rounded" src="${json.image}" width="20" height="20" alt="img">`
             );
         }
     });

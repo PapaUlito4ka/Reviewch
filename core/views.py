@@ -12,7 +12,6 @@ import json
 
 from core.models import Review, User
 import core.forms as forms
-import core.api_requests as api
 import core.services as services
 from core.exceptions import handle_error
 
@@ -22,7 +21,7 @@ def home(request: HttpRequest):
         'ordering': request.GET.get('ordering', 'created_at'),
         'group': request.GET.get('group', ''),
         'page': request.GET.get('page', 1),
-        'language': request.COOKIES.get('language', 'english')
+        'language': request.COOKIES.get('language', 'russian')
     }
     return render(request, 'home.html', context=context)
 
@@ -33,7 +32,7 @@ def search(request: HttpRequest):
         'group': request.GET.get('group', ''),
         'search': request.GET.get('q', ''),
         'page': request.GET.get('page', 1),
-        'language': request.COOKIES.get('language', 'english')
+        'language': request.COOKIES.get('language', 'russian')
     }
     return render(request, 'search.html', context=context)
 
@@ -41,7 +40,7 @@ def search(request: HttpRequest):
 @csrf_exempt
 def register(request: HttpRequest):
     context = {
-        'language': request.COOKIES.get('language', 'english')
+        'language': request.COOKIES.get('language', 'russian')
     }
     if request.method == 'GET':
         if request.user.is_authenticated:
@@ -77,7 +76,7 @@ def profile(request: HttpRequest, id: int = None):
         'group': request.GET.get('group', ''),
         'search': request.GET.get('q', ''),
         'page': request.GET.get('page', 1),
-        'language': request.COOKIES.get('language', 'english')
+        'language': request.COOKIES.get('language', 'russian')
     }
     return render(request, 'profile.html', context=context)
 
@@ -86,7 +85,7 @@ def review(request: HttpRequest, id: int):
     context = {
         'review_id': id,
         'form': forms.CommentForm(),
-        'language': request.COOKIES.get('language', 'english')
+        'language': request.COOKIES.get('language', 'russian')
     }
     if request.method == 'GET':
         context['form'] = forms.CommentForm()
@@ -109,7 +108,7 @@ def review(request: HttpRequest, id: int):
 @login_required(login_url='/accounts/login')
 def create_review(request: HttpRequest):
     context = {
-        'language': request.COOKIES.get('language', 'english')
+        'language': request.COOKIES.get('language', 'russian')
     }
     if request.method == 'GET':
         context['form'] = forms.CreateReviewForm()
@@ -122,7 +121,7 @@ def create_review(request: HttpRequest):
         if context['form'].is_valid():
             try:
                 created_review = services.ReviewService.create(request.POST)
-                services.ImageService.create(created_review.id, request.FILES)
+                services.ImageService.create(request.FILES, review_id=created_review.id)
             except ValidationError as e:
                 handle_error(context, e)
                 return render(request, 'create_review.html', context=context)
@@ -136,7 +135,7 @@ def edit_review(request: HttpRequest, id: int):
         return redirect('/profile')
     context = {
         'review_id': id,
-        'language': request.COOKIES.get('language', 'english')
+        'language': request.COOKIES.get('language', 'russian')
     }
     if request.method == 'GET':
         try:
@@ -168,7 +167,7 @@ def edit_review(request: HttpRequest, id: int):
 
 def tags(request: HttpRequest):
     context = {
-        'language': request.COOKIES.get('language', 'english')
+        'language': request.COOKIES.get('language', 'russian')
     }
     return render(request, 'tags.html', context=context)
 
@@ -185,7 +184,7 @@ def tags(request: HttpRequest):
 )
 def users(request: HttpRequest):
     context = {
-        'language': request.COOKIES.get('language', 'english')
+        'language': request.COOKIES.get('language', 'russian')
     }
     return render(request, 'users.html', context=context)
 

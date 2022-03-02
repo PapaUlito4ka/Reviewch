@@ -14,6 +14,26 @@ function getCookie(name) {
     return cookieValue;
 }
 
+function editProfileImage(url) {
+    const csrftoken = getCookie('csrftoken');
+    let formData = new FormData();
+    formData.set('images', $('.edit-profile-image')[0].files[0]);
+    $.ajax({
+        url: url,
+        method: 'put',
+        data: formData,
+        headers: {'X-CSRFToken': csrftoken },
+        processData: false,
+        contentType: false,
+        success: function (json) {
+            $('.profile-image').prop('src', json.image);
+        },
+        error: function (json) {
+            console.log(json);
+        }
+    });
+}
+
 function getUserPublicationsCount(url) {
     $.ajax({
         url: url,
@@ -194,6 +214,10 @@ function render(userSessionId, userId, userIsStaff, search, ordering, group, pag
     getUserCommentsCount(`/api/users/${userId}/comments_count`);
     findUserReviews(search, userSessionId, userIsStaff, userId, ordering, group, page);
     getUser(`/api/users/${userId}`);
+
+    $('.edit-profile-image').change(function() {
+        editProfileImage(`/api/users/${userId}/edit_profile_image/`);
+    });
 
     $('.latest-order').click(function () {
         setUrlParameter('ordering', '-created_at')

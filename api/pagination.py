@@ -23,3 +23,7 @@ class ReviewPagination(CustomPagination):
 
 class TagPagination(CustomPagination):
     page_size = 36
+
+
+class UploadImagePagination(CustomPagination):
+    page_size = 5

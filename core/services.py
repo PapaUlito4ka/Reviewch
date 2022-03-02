@@ -1,9 +1,10 @@
-from typing import Type
+from typing import Type, List
 
 from django.http import QueryDict
+from rest_framework.exceptions import ValidationError
 
 from api.serializers import DetailUserSerializer, DetailReviewSerializer, CommentSerializer, \
-                            UploadImageSerializer, TagSerializer
+    UploadImageSerializer, TagSerializer
 from core.models import User, Review, Tag, UploadImage
 
 
@@ -11,7 +12,8 @@ class UserService:
 
     @staticmethod
     def create(raw_user: Type[QueryDict]):
-        raw_user = raw_user.dict()
+        if isinstance(raw_user, QueryDict):
+            raw_user = raw_user.dict()
         serializer = DetailUserSerializer(data=raw_user)
         serializer.is_valid(raise_exception=True)
         return serializer.create(serializer.validated_data)
@@ -47,8 +49,7 @@ class ReviewService:
         for tag_name in raw_review['tags']:
             TagService.get_or_create(tag_name)
 
-        ImageService.delete(review_id)
-        ImageService.create(review_id, files)
+        ImageService.update(files, review_id=review_id)
 
         serializer = DetailReviewSerializer(data=raw_review)
         serializer.is_valid(raise_exception=True)
@@ -76,15 +77,48 @@ class TagService:
 class ImageService:
 
     @staticmethod
-    def create(review_id: int, files: Type[QueryDict]):
+    def create(files: Type[QueryDict], user_id: int = None, review_id: int = None):
+        if (user_id is not None and review_id is not None) or \
+                (user_id is None and review_id is None):
+            raise ValidationError('only user_id or review_id must be specified')
         instances = []
         for image in files.getlist('images'):
-            serializer = UploadImageSerializer(data=dict(image=image, review_id=review_id))
+            serializer = None
+            if review_id is not None:
+                serializer = UploadImageSerializer(data=dict(image=image, review_id=review_id))
+            if user_id is not None:
+                serializer = UploadImageSerializer(data=dict(image=image, user_id=user_id))
             serializer.is_valid(raise_exception=True)
             instances.append(serializer.create(serializer.validated_data))
 
         return instances
 
     @staticmethod
-    def delete(review_id: int):
-        return UploadImage.objects.filter(review_id=review_id).delete()
+    def update(files: Type[QueryDict], user_id: int = None, review_id: int = None):
+        if (user_id is not None and review_id is not None) or \
+                (user_id is None and review_id is None):
+            raise ValidationError('only user_id or review_id must be specified')
+        instances = []
+        for image in files.getlist('images'):
+            serializer = None
+            ins = None
+            if review_id is not None:
+                serializer = UploadImageSerializer(data=dict(image=image, review_id=review_id))
+                ins = UploadImage.objects.get(review_id=review_id)
+            if user_id is not None:
+                serializer = UploadImageSerializer(data=dict(image=image, user_id=user_id))
+                ins = UploadImage.objects.get(user_id=user_id)
+            serializer.is_valid(raise_exception=True)
+            instances.append(serializer.update(ins, serializer.validated_data))
+
+        return instances
+
+    @staticmethod
+    def delete(user_id: int = None, review_id: int = None):
+        if (user_id is not None and review_id is not None) or \
+                (user_id is None and review_id is None):
+            raise ValidationError('only user_id or review_id must be specified')
+        if not user_id:
+            return UploadImage.objects.filter(review_id=review_id).delete()
+        if not review_id:
+            return UploadImage.objects.filter(user_id=user_id).delete()
