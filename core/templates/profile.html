@@ -19,7 +19,9 @@
             <div class="cloud p-2">
             <p class="fs-5 text-center user-username">Loading...</p>
             <img src="#" class="img-fluid rounded profile-image">
-            <input type="file" class="form-control edit-profile-image">
+            {% if request.user.is_authenticated and request.user.id == user_id %}
+                <input type="file" class="form-control edit-profile-image">
+            {% endif %}
             <div class="d-flex justify-content-between">
                 <p>{% if language == 'english' %}Publications{% else %}Публикации{% endif %}</p>
                 <span class="publication-count">Loading...</span>
